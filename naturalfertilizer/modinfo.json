@@ -1,0 +1,13 @@
+{
+  "type": "code",
+  "modid": "naturalfertilizer",
+  "name": "Natural Fertilizer",
+  "authors": [
+    "xXx_Ape_xXx"
+  ],
+  "description": "Adds natural fertilizer created from animal droppings",
+  "version": "1.0.0",
+  "dependencies": {
+    "game": "1.21.0"
+  }
+}

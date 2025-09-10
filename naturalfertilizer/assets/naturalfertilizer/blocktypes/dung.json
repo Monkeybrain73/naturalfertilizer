@@ -1,0 +1,418 @@
+{
+  "code": "dung",
+  "storageFlags": 33,
+  "variantgroups": [
+    {
+      "code": "height",
+      "states": [ "1", "2", "3", "4" ]
+    }
+  ],
+  "attributes": {
+    "inContainerTexture": { "base": "game:block/soil/fertcompost" }
+  },
+  "drawtype": "Json",
+  "randomdrawoffset": true,
+  "snowcoverage": true,
+  "shapeinventoryByType": {
+    "*-1": { "base": "block/dung/dung1" },
+    "*-2": { "base": "block/dung/dung2" },
+    "*-3": { "base": "block/dung/dung3" },
+    "*-4": { "base": "block/dung/dung4" }
+  },
+  "shapeByType": {
+    "*-1": {
+      "base": "block/dung/dung1",
+      "alternates": [
+        {
+          "base": "block/dung/dung1",
+          "rotateY": 22.5
+        },
+        {
+          "base": "block/dung/dung1",
+          "rotateY": 45
+        },
+        {
+          "base": "block/dung/dung1",
+          "rotateY": 67.5
+        },
+        {
+          "base": "block/dung/dung1",
+          "rotateY": 90
+        },
+        {
+          "base": "block/dung/dung1",
+          "rotateY": 112.5
+        },
+        {
+          "base": "block/dung/dung1",
+          "rotateY": 135
+        },
+        {
+          "base": "block/dung/dung1",
+          "rotateY": 157.5
+        },
+        {
+          "base": "block/dung/dung1",
+          "rotateY": 180
+        },
+        {
+          "base": "block/dung/dung1",
+          "rotateY": 202.5
+        },
+        {
+          "base": "block/dung/dung1",
+          "rotateY": 225
+        },
+        {
+          "base": "block/dung/dung1",
+          "rotateY": 247.5
+        },
+        {
+          "base": "block/dung/dung1",
+          "rotateY": 270
+        }
+      ]
+    },
+    "*-2": {
+      "base": "block/dung/dung2",
+      "alternates": [
+        {
+          "base": "block/dung/dung2",
+          "rotateY": 22.5
+        },
+        {
+          "base": "block/dung/dung2",
+          "rotateY": 45
+        },
+        {
+          "base": "block/dung/dung2",
+          "rotateY": 67.5
+        },
+        {
+          "base": "block/dung/dung2",
+          "rotateY": 90
+        },
+        {
+          "base": "block/dung/dung2",
+          "rotateY": 112.5
+        },
+        {
+          "base": "block/dung/dung2",
+          "rotateY": 135
+        },
+        {
+          "base": "block/dung/dung2",
+          "rotateY": 157.5
+        },
+        {
+          "base": "block/dung/dung2",
+          "rotateY": 180
+        },
+        {
+          "base": "block/dung/dung2",
+          "rotateY": 202.5
+        },
+        {
+          "base": "block/dung/dung2",
+          "rotateY": 225
+        },
+        {
+          "base": "block/dung/dung2",
+          "rotateY": 247.5
+        },
+        {
+          "base": "block/dung/dung2",
+          "rotateY": 270
+        }
+      ]
+    },
+    "*-3": {
+      "base": "block/dung/dung3",
+      "alternates": [
+        {
+          "base": "block/dung/dung3",
+          "rotateY": 22.5
+        },
+        {
+          "base": "block/dung/dung3",
+          "rotateY": 45
+        },
+        {
+          "base": "block/dung/dung3",
+          "rotateY": 67.5
+        },
+        {
+          "base": "block/dung/dung3",
+          "rotateY": 90
+        },
+        {
+          "base": "block/dung/dung3",
+          "rotateY": 112.5
+        },
+        {
+          "base": "block/dung/dung3",
+          "rotateY": 135
+        },
+        {
+          "base": "block/dung/dung3",
+          "rotateY": 157.5
+        },
+        {
+          "base": "block/dung/dung3",
+          "rotateY": 180
+        },
+        {
+          "base": "block/dung/dung3",
+          "rotateY": 202.5
+        },
+        {
+          "base": "block/dung/dung3",
+          "rotateY": 225
+        },
+        {
+          "base": "block/dung/dung3",
+          "rotateY": 247.5
+        },
+        {
+          "base": "block/dung/dung3",
+          "rotateY": 270
+        }
+      ]
+    },
+    "*-4": {
+      "base": "block/dung/dung4",
+      "alternates": [
+        {
+          "base": "block/dung/dung4",
+          "rotateY": 22.5
+        },
+        {
+          "base": "block/dung/dung4",
+          "rotateY": 45
+        },
+        {
+          "base": "block/dung/dung4",
+          "rotateY": 67.5
+        },
+        {
+          "base": "block/dung/dung4",
+          "rotateY": 90
+        },
+        {
+          "base": "block/dung/dung4",
+          "rotateY": 112.5
+        },
+        {
+          "base": "block/dung/dung4",
+          "rotateY": 135
+        },
+        {
+          "base": "block/dung/dung4",
+          "rotateY": 157.5
+        },
+        {
+          "base": "block/dung/dung4",
+          "rotateY": 180
+        },
+        {
+          "base": "block/dung/dung4",
+          "rotateY": 202.5
+        },
+        {
+          "base": "block/dung/dung4",
+          "rotateY": 225
+        },
+        {
+          "base": "block/dung/dung4",
+          "rotateY": 247.5
+        },
+        {
+          "base": "block/dung/dung4",
+          "rotateY": 270
+        }
+      ]
+    }
+  },
+  "textures": {
+    "fertlow": { "base": "game:block/soil/fertcompost", "alternates": [{ "base": "game:block/soil/ferthigh" }, { "base": "game:block/soil/peat" }, { "base": "game:block/soil/farmland/fertcompost-moist" }] }
+  },
+  "creativeinventory": {
+    "general": [ "*" ],
+    "items": [ "*" ]
+  },
+  "maxstacksize": 32,
+  "materialDensity": 500,
+  "resistance": 1,
+  "blockmaterial": "Soil",
+  "faceCullMode": "MergeSnowLayer",
+  "resistanceByType": {
+    "*-1": 0.2,
+    "*-2": 0.3,
+    "*-3": 0.4,
+    "*-4": 0.5
+  },
+  "dropsByType": {
+    "*-1": [
+      {
+        "type": "item",
+        "code": "naturalfertilizer:manure",
+        "quantity": {
+          "avg": 1.5,
+          "var": 0.5
+        },
+        "tool": "shovel"
+      }
+    ],
+    "*-2": [
+      {
+        "type": "item",
+        "code": "naturalfertilizer:manure",
+        "quantity": {
+          "avg": 2,
+          "var": 1
+        },
+        "tool": "shovel"
+      }
+    ],
+    "*-3": [
+      {
+        "type": "item",
+        "code": "naturalfertilizer:manure",
+        "quantity": {
+          "avg": 2,
+          "var": 1
+        },
+        "tool": "shovel"
+      }
+    ],
+    "*-4": [
+      {
+        "type": "item",
+        "code": "naturalfertilizer:manure",
+        "quantity": {
+          "avg": 2.5,
+          "var": 0.5
+        },
+        "tool": "shovel"
+      }
+    ]
+  },
+    "lightabsorption": 0,
+    "sideopaque": {
+      "all": false
+    },
+    "sideao": {
+      "all": true
+    },
+    "emitsideao": {
+      "all": false
+    },
+    "sidesolid": {
+      "all": false
+    },
+    "sounds": {
+      "walk": "game:walk/sludge",
+      "place": "game:walk/sludge",
+      "break": "game:walk/sludge",
+      "hit": "game:block/gravel"
+    },
+    "walkspeedmultiplierByType": {
+      "dung-1": 0.95,
+      "dung-2": 0.9,
+      "dung-3": 0.85,
+      "dung-4": 0.75
+    },
+    "replaceable": 2000,
+    "collisionbox": null,
+    "selectionboxbytype": {
+      "dung-1": {
+        "x1": 0,
+        "y1": 0,
+        "z1": 0,
+        "x2": 1,
+        "y2": 0.035,
+        "z2": 1
+      },
+      "dung-2": {
+        "x1": 0,
+        "y1": 0,
+        "z1": 0,
+        "x2": 1,
+        "y2": 0.07,
+        "z2": 1
+      },
+      "dung-3": {
+        "x1": 0,
+        "y1": 0,
+        "z1": 0,
+        "x2": 1,
+        "y2": 0.1,
+        "z2": 1
+      },
+      "dung-4": {
+        "x1": 0,
+        "y1": 0,
+        "z1": 0,
+        "x2": 1,
+        "y2": 0.13,
+        "z2": 1
+      }
+    },
+    "guiTransform": {
+      "translation": {
+        "x": 3,
+        "y": -0,
+        "z": -25
+      },
+      "rotation": {
+        "x": -35,
+        "y": 18,
+        "z": 0
+      },
+      "origin": {
+        "x": 0.47,
+        "y": -0.12,
+        "z": 0.8
+      },
+      "scale": 2
+    },
+    "fpHandTransform": {
+      "rotation": {
+        "x": 54,
+        "y": 99,
+        "z": -33
+      },
+      "scale": 3
+    },
+    "tpHandTransform": {
+      "translation": {
+        "x": -1.15,
+        "y": -0.6,
+        "z": -0.3
+      },
+      "rotation": {
+        "x": 70,
+        "y": 11,
+        "z": -65
+      },
+      "scale": ".8"
+    },
+    "groundTransform": {
+      "translation": {
+        "x": 0,
+        "y": 0.41,
+        "z": 0
+      },
+      "rotation": {
+        "x": 0,
+        "y": 8,
+        "z": 0
+      },
+      "origin": {
+        "x": 0.5,
+        "y": 0.4,
+        "z": 0.5299
+      },
+      "scale": 5
+    }
+  }
