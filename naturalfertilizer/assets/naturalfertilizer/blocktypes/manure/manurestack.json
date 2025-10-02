@@ -1,0 +1,37 @@
+{
+  "code": "manurestack",
+  "behaviors": [
+    { "name": "Lockable" },
+    {
+      "name": "UnstableFalling",
+      "properties": {
+        "attachmentArea": {
+          "x1": 0,
+          "y1": 0,
+          "z1": 0,
+          "x2": 16,
+          "y2": 0,
+          "z2": 16
+        }
+      }
+    }
+  ],
+  "attributes": {
+    "shatteredStack": {
+      "type": "block",
+      "code": "clayshattered-normal"
+    }
+  },
+  "class": "natfert.manurestack",
+  "entityClass": "natfert.bemanurestack",
+  "shape": {
+    "base": "game:block/basic/invisible"
+  },
+  "sidesolid": { "all": false },
+  "sideopaque": { "all": false },
+  "faceCullMode": "NeverCull",
+  "blockmaterial": "Soil",
+  "creativeinventory": { "general": [ "" ] },
+  "lightAbsorption": 0,
+  "drops": []
+}

@@ -1,4 +1,13 @@
 {
   "naturalfertilizer:block-dung-*": "Dung",
-  "naturalfertilizer:item-manure": "Fresh manure"
+  "naturalfertilizer:item-manure": "Fresh manure",
+  "naturalfertilizer:block-smallpoop-*": "Small droppings",
+  "naturalfertilizer:item-weakfertilizer": "Weak fertilizer",
+  "naturalfertilizer:item-maturefertilizer": "Mature fertilizer",
+  "naturalfertilizer:block-weakfertilizerblock": "Pile of weak fertilizer",
+  "naturalfertilizer:block-manurepile-*": "Pile of manure",
+  "naturalfertilizer:Manure Pile": "Pile of manure",
+  "naturalfertilizer:block-manure-fresh-manurepile": "Pile of fresh manure",
+  "game:blockhelp-manurepile-add": "Add grass",
+  "game:blockhelp-manurepile-addall": "Add bulk of grass"
 }

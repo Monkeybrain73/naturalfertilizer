@@ -25,7 +25,17 @@ namespace naturalfertilizer
 
         public override void Start(ICoreAPI api)
         {
-            api.RegisterEntityBehaviorClass("defecate", typeof(EntityBehaviorDefecate));
+            api.RegisterBlockClass("natfert.manurestack", typeof(BlockManureStack));
+            api.RegisterBlockClass("natfert.manurepile", typeof(BlockManurePile));
+
+            api.RegisterBlockEntityClass("natfert.bemanurestack", typeof(BlockEntityManureStack));
+            api.RegisterBlockEntityClass("natfert.bemanurepile", typeof(BEManurePile));
+
+            api.RegisterEntityBehaviorClass("natfert.defecate", typeof(EntityBehaviorDefecate));
+
+            api.RegisterCollectibleBehaviorClass("natfert.manurepile", typeof(CollectibleBehaviorManurePile));
+            api.RegisterCollectibleBehaviorClass("natfert.manurestack", typeof(CollectibleBehaviorManureStack));
+
             api.Logger.Event("started 'Natural Fertilizer' mod");
         }
 
