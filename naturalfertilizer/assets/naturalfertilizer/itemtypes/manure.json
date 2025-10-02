@@ -2,22 +2,25 @@
 	"code": "manure",
 	"behaviors": [
 		{
-			"name": "GroundStorable",
+			"name": "natfert.manurestack",
 			"properties": {
 				"layout": "Stacking",
-				"placeRemoveSound": "game:sounds/walk/sludge*",
-				"stackingModel": "naturalfertilizer:item/manure/manure-pile",
+				"placeRemoveSound": "sounds/walk/sludge1",
+        "randomizeSoundPitch": true,
+				"stackingModel": "item/manure/manure-pile",
+        "randomizeCenterRotation": true,
 				"upSolid": false,
 				"modelItemsToStackSizeRatio": 17,
+				"maxStackHeight": 32,
 				"stackingCapacity": 32,
 				"transferQuantity": 1,
-				"bulkTransferQuantity": 10,
+				"bulkTransferQuantity": 4,
 				"collisionBox": {
 					"x1": 0,
 					"y1": 0,
 					"z1": 0,
 					"x2": 1,
-					"y2": 0.12,
+					"y2": 0.2,
 					"z2": 1
 				},
 				"cbScaleYByLayer": 0.12
@@ -40,21 +43,7 @@
 		"items": [ "*" ]
 	},
 	"maxstacksize": 32,
-	"attributes": {
-		"groundStorageTransform": {
-			"translation": {
-				"x": -0,
-				"y": -0.46,
-				"z": -0.2
-			},
-			"rotation": {
-				"x": -90,
-				"y": 0,
-				"z": -19
-			}
-		}
-	},
-	"materialDensity": 1000,
+	"materialDensity": 500,
 	"heldTpHitAnimation": "breaktool",
 	"fpHandTransform": {
 		"translation": {
@@ -112,13 +101,13 @@
 			"z": 0
 		},
 		"rotation": {
-			"x": 90,
+			"x": 0,
 			"y": 0,
 			"z": 0
 		},
 		"origin": {
 			"x": 0.5,
-			"y": 0.22,
+			"y": 0,
 			"z": 0.54
 		},
 		"scale": 5

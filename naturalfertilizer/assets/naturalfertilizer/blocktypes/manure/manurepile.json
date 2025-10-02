@@ -1,0 +1,138 @@
+{
+  "code": "manurepile",
+  "class": "natfert.manurepile",
+  "entityclass": "natfert.bemanurepile",
+  "attributes": {
+    "fermentation": {
+      "requiredGrass": 64,
+      "slotStackSize": 64,
+      "fermentationHours": 288,
+      "resultBlock": "naturalfertilizer:weakfertilizerblock"
+    },
+    "humanoidTraversalCost": 2,
+    "reinforcable": true,
+    "partialAttachable": true,
+    "inventoryClassName": "manurepile",
+    "defaultType": "manure-fresh",
+    "handbook": {
+      "groupBy": [ "manurepile" ]
+    },
+    "types": [ "manure-fresh" ],
+    "properties": {
+      "*": {
+        "quantitySlots": 1,
+        "rotatatableInterval": "22.5deg",
+        "storageFlags": 1,
+        "shape": { "base": "naturalfertilizer:block/manurepile/manurepile-empty" }
+      }
+    }
+  },
+  "behaviors": [
+    { "name": "Lockable" },
+    { "name": "Container" },
+    { "name": "natfert.manurepile" }
+  ],
+  "creativeinventory": {},
+  "notCreativeinventoryStacks": [
+    {
+      "tabs": [ "general" ],
+      "stacks": [
+        {
+          "type": "block",
+          "code": "manurepile",
+          "attributes": {
+            "fillState": "stage1",
+            "type": "manure-fresh"
+          }
+        }
+      ]
+    }
+  ],
+  "creativeinventoryStacks": [
+    {
+      "tabs": [ "general", "decorative" ],
+      "stacks": [
+        {
+          "type": "block",
+          "code": "manurepile",
+          "attributes": {
+            "fillState": "empty",
+            "type": "manure-fresh"
+          }
+        }
+      ]
+    }
+  ],
+  "heldTpIdleAnimation": "holdunderarm",
+  "shapeInventory": {
+    "base": "naturalfertilizer:block/manurepile/manurepile-empty",
+    "rotateY": 0
+  },
+  "shapeByType": {
+    "base": "naturalfertilizer:block/manurepile/manurepile-empty",
+    "rotateY": 0
+  },
+  "textures": {
+    "manure-fresh-empty": { "base": "naturalfertilizer:block/manurepile/manurepile-stage0" },
+    "manure-fresh-stage1": { "base": "naturalfertilizer:block/manurepile/manurepile-stage1" },
+    "manure-fresh-stage2": { "base": "naturalfertilizer:block/manurepile/manurepile-stage2" },
+    "manure-fresh-stage3": { "base": "naturalfertilizer:block/manurepile/manurepile-stage3" },
+    "manure-fresh-stage4": { "base": "naturalfertilizer:block/manurepile/manurepile-stage4" }
+  },
+  "blockmaterial": "Wood",
+  "replaceable": 900,
+  "resistance": 3,
+  "renderpass": "opaquenocull",
+  "lightAbsorption": 0,
+  "sideAo": { "all": false },
+  "sidesolid": {
+    "all": false
+  },
+  "sideopaque": {
+    "all": false
+  },
+  "sounds": {
+    "place": "game:walk/sludge1",
+    "hit": "game:walk/sludge1",
+    "break": "game:block/dirt1",
+    "walk": "game:walk/sludge1"
+  },
+  "materialDensity": 600,
+  "tpHandTransform": {
+    "translation": {
+      "x": -1.5,
+      "y": -0.5,
+      "z": -0.8
+    },
+    "rotation": {
+      "x": 0,
+      "y": -2,
+      "z": -99
+    },
+    "scale": 0.44
+  },
+  "guiTransform": {
+    "origin": {
+      "x": 0.5,
+      "y": 0.4,
+      "z": 0.5
+    },
+    "scale": 1.46
+  },
+  "collisionbox": {
+    "x1": 0.1875,
+    "y1": 0,
+    "z1": 0.1875,
+    "x2": 0.8125,
+    "y2": 0.625,
+    "z2": 0.7625
+  },
+  "selectionbox": {
+    "x1": 0.1875,
+    "y1": 0,
+    "z1": 0.1875,
+    "x2": 0.8125,
+    "y2": 0.625,
+    "z2": 0.7625
+  }
+}

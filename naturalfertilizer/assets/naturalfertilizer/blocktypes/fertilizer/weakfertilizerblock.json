@@ -1,0 +1,139 @@
+{
+  "code": "weakfertilizerblock",
+  "storageFlags": 33,
+  "behaviors": [
+    { "name": "Lockable" },
+    {
+      "name": "UnstableFalling",
+      "properties": {
+        "attachmentArea": {
+          "x1": 0,
+          "y1": 0,
+          "z1": 0,
+          "x2": 16,
+          "y2": 0,
+          "z2": 16
+        }
+      }
+    }
+  ],
+  "attributes": {
+    "inContainerTexture": { "base": "game:block/soil/fertlow" }
+  },
+  "drawtype": "Json",
+  "shape": {
+    "base": "naturalfertilizer:block/fertilizer/weakfertilizerblock",
+    "scale": 0.8
+  },
+  "shapeinventory": {
+    "base": "naturalfertilizer:block/fertilizer/weakfertilizerblock"
+  },
+  "textures": {
+    "fertlow": { "base": "game:block/soil/fertlow" }
+  },
+  "doNotRenderAtLod2": true,
+  "randomdrawoffset": true,
+  "snowcoverage": true,
+  "sidesolid": { "all": false },
+  "sideopaque": { "all": false },
+  "sideao": { "all": true },
+  "emitsideao": { "all": false },
+  "faceCullMode": "MergeSnowLayer",
+  "blockmaterial": "Soil",
+  "creativeinventory": {
+    "general": [ "*" ],
+    "items": [ "*" ]
+  },
+  "maxstacksize": 32,
+  "resistance": 2,
+  "lightAbsorption": 0,
+  "sounds": {
+    "walk": "game:walk/sludge",
+    "place": "game:walk/sludge1",
+    "break": "game:walk/sludge2",
+    "hit": "game:block/gravel"
+  },
+  "drops": [
+    {
+      "type": "item",
+      "code": "naturalfertilizer:weakfertilizer",
+      "quantity": {
+        "avg": 7,
+        "var": 1
+      }
+    }
+  ],
+  "collisionbox": {
+    "x1": 0.125,
+    "y1": 0,
+    "z1": 0.125,
+    "x2": 0.875,
+    "y2": 0.4475,
+    "z2": 0.875
+  },
+  "selectionBox": {
+    "x1": 0.125,
+    "y1": 0,
+    "z1": 0.125,
+    "x2": 0.875,
+    "y2": 0.4475,
+    "z2": 0.875
+  },
+  "guiTransform": {
+    "translation": {
+      "x": 3,
+      "y": 0,
+      "z": -25
+    },
+    "rotation": {
+      "x": -35,
+      "y": 18,
+      "z": 0
+    },
+    "origin": {
+      "x": 0.5,
+      "y": -0.05,
+      "z": 1
+    },
+    "scale": 1.1
+  },
+  "fpHandTransform": {
+    "rotation": {
+      "x": 54,
+      "y": 99,
+      "z": -33
+    },
+    "scale": 3
+  },
+  "tpHandTransform": {
+    "translation": {
+      "x": -1.15,
+      "y": -0.6,
+      "z": -0.3
+    },
+    "rotation": {
+      "x": 70,
+      "y": 11,
+      "z": -65
+    },
+    "scale": ".8"
+  },
+  "groundTransform": {
+    "translation": {
+      "x": 0,
+      "y": 0.41,
+      "z": 0
+    },
+    "rotation": {
+      "x": 0,
+      "y": 8,
+      "z": 0
+    },
+    "origin": {
+      "x": 0.5,
+      "y": 0.4,
+      "z": 0.5299
+    },
+    "scale": 5
+  }
+}

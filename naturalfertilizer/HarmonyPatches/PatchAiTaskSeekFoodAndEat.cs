@@ -15,7 +15,6 @@ namespace naturalfertilizer
             {
                 var defecateBh = ___entity.GetBehavior<EntityBehaviorDefecate>();
                 defecateBh?.Notify("mealEaten", __instance.TargetPoi());
-                // Debug.WriteLine("DEBUG: Notified defecate behavior of meal eaten");
             }
         }
     }

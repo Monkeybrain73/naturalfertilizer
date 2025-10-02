@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Cairo;
+using System;
+using System.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Datastructures;
@@ -9,8 +11,15 @@ namespace naturalfertilizer
     public class EntityBehaviorDefecate : EntityBehavior
     {
         public readonly ICoreAPI api;
-        public double nextDefecationHour = -1;
         public readonly Random rand;
+        private string dungBase = "naturalfertilizer:dung";
+        private int maxStages = 4;
+        private string[] variants = new[] { "a", "b", "c", "d" };
+        private int minHours = 12;
+        private int maxHours = 24;
+
+        public double nextDefecationHour = -1;
+        public bool canDefecate = false;
 
         public EntityBehaviorDefecate(Entity entity) : base(entity)
         {
@@ -20,19 +29,35 @@ namespace naturalfertilizer
         public override void Initialize(EntityProperties properties, JsonObject attributes)
         {
             base.Initialize(properties, attributes);
-        }
+            JsonObject props = attributes["properties"];
 
+            dungBase = new AssetLocation(props["dungBase"].AsString("naturalfertilizer:dung"));
+            maxStages = props["stages"].AsInt(maxStages);
+            variants = props["variants"].AsArray<string>(new string[] { "a", "b", "c" });
+            minHours = props["minHours"].AsInt(minHours);
+            maxHours = props["maxHours"].AsInt(maxHours);
+
+            // entity.World.Logger.Debug("[Defecate] Initialized for {0}, dungBase={1}, stages={2}, variants={3}, minHours={4}, maxHours={5}",
+            // entity.Code, dungBase, maxStages, string.Join(",", variants), minHours, maxHours
+            // );
+        }
 
         public override void Notify(string key, object data)
         {
             IWorldAccessor world = entity.World;
 
-            if (key == "mealEaten")
+            if (!canDefecate)
             {
-                double currentHour = entity.World.Calendar.TotalHours;
-                nextDefecationHour = currentHour + 2 + rand.NextDouble() * 2; // 2–4 hours
-                // string displayName = entity.GetName();
-                // world.Logger.VerboseDebug("{0} ate a meal at {1}, next defecation scheduled at {2}", displayName, FormatTime(currentHour), FormatTime(nextDefecationHour));
+                if (key == "mealEaten")
+                {
+                    double currentHour = entity.World.Calendar.TotalHours;
+                    nextDefecationHour = currentHour + minHours + rand.NextDouble() * maxHours;
+                    canDefecate = true;
+
+                    // string displayName = entity.GetName();
+                    // world.Logger.VerboseDebug("{0} ate a meal at {1}, next defecation scheduled at {2}", displayName, FormatTime(currentHour), FormatTime(nextDefecationHour));
+                    // world.Logger.Debug("[Defecate] {0} can now defecate", entity.GetName());
+                }
             }
         }
 
@@ -49,30 +74,49 @@ namespace naturalfertilizer
         private void Defecate()
         {
             IWorldAccessor world = entity.World;
-
-            int variant = rand.Next(1, 5);
-            Block dungBlock = world.GetBlock(new AssetLocation($"naturalfertilizer:dung-{variant}"));
-            if (dungBlock == null) return;
-
             BlockPos pos = entity.ServerPos.AsBlockPos.DownCopy();
 
-            if (world.BlockAccessor.GetBlock(pos).IsReplacableBy(dungBlock))
-            {
-                world.BlockAccessor.SetBlock(dungBlock.BlockId, pos);
-            }
-            else
+            if (!world.BlockAccessor.GetBlock(pos).IsReplacableBy(world.GetBlock(new AssetLocation($"{dungBase}-1{variants[0]}"))))
             {
                 pos = entity.ServerPos.AsBlockPos;
-                if (world.BlockAccessor.GetBlock(pos).IsReplacableBy(dungBlock))
+            }
+
+            Block currentBlock = world.BlockAccessor.GetBlock(pos);
+
+            int newStage = 1;
+            string chosenVariant = variants[rand.Next(variants.Length)];
+
+            if (currentBlock.Code != null && currentBlock.Code.Path.StartsWith(dungBase.Split(':')[1]))
+            {
+                string[] parts = currentBlock.Code.Path.Split('-');
+                if (parts.Length > 1)
                 {
-                    world.BlockAccessor.SetBlock(dungBlock.BlockId, pos);
+                    string stagePart = new string(parts[1].TakeWhile(char.IsDigit).ToArray());
+                    string variantPart = new string(parts[1].SkipWhile(char.IsDigit).ToArray());
+
+                    if (int.TryParse(stagePart, out int parsed))
+                    {
+                        newStage = Math.Min(parsed + 1, maxStages);
+                    }
+
+                    if (!string.IsNullOrEmpty(variantPart))
+                    {
+                        chosenVariant = variantPart;
+                    }
                 }
             }
-            // string displayName = entity.GetName();
-            // world.Logger.VerboseDebug("{0} defecated at {1},{2},{3}", displayName, pos.X - 512000, pos.Y, pos.Z -512000);
-            // Reset next defecation time
-            nextDefecationHour = -1;
+
+            string newBlockCode = $"{dungBase}-{newStage}{chosenVariant}";
+            Block newBlock = world.GetBlock(new AssetLocation(newBlockCode));
+
+            if (newBlock != null)
+            {
+                world.BlockAccessor.SetBlock(newBlock.BlockId, pos);
+            }
+            entity.World.Logger.Debug("[Defecate] {0} defecated at {1}, placed block {2}", entity.GetName(), pos, newBlockCode);
+            canDefecate = false;
         }
+
         public override string PropertyName() => "defecate";
 
         private string FormatTime(double totalHours)
@@ -82,6 +126,5 @@ namespace naturalfertilizer
             int minutes = totalMinutes % 60;
             return $"{hours:D2}:{minutes:D2}";
         }
-
     }
 }

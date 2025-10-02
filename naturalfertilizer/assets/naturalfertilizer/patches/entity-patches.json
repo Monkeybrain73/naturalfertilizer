@@ -1,18 +1,97 @@
 [
   {
-    "enabled": false,
-    "side": "server",
-    "op": "addmerge",
-    "file": "game:entities/animal/mammal/hooved/pig-adult.json",
-    "path": "/client/behaviors/-",
-    "value": { "code": "defecate" }
-  },
-  {
     "enabled": true,
     "side": "server",
     "op": "addmerge",
     "file": "game:entities/animal/mammal/hooved/pig-adult.json",
     "path": "/server/behaviors",
-    "value": [ { "code": "defecate" } ]
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:dung",
+          "stages": 4,
+          "variants": [ "a", "b", "c", "d" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "game:entities/animal/mammal/hooved/goat-adult.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:dung",
+          "stages": 4,
+          "variants": [ "a", "b", "c", "d" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "game:entities/animal/mammal/hooved/sheep-adult.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:dung",
+          "stages": 4,
+          "variants": [ "a", "b", "c", "d" ],
+          "minHours": 28,
+          "maxHours": 40
+        }
+      }
+    ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "game:entities/animal/mammal/hare-adult.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:smallpoop",
+          "stages": 2,
+          "variants": [ "a" ],
+          "minHours": 12,
+          "maxHours": 18
+        }
+      }
+    ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "game:entities/animal/bird/chicken-adult.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:chickenpoop",
+          "stages": 4,
+          "variants": [ "a" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ]
   }
 ]

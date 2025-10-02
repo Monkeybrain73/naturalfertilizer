@@ -45,6 +45,7 @@
   <Content Include="assets\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
+  <Compile Remove="CollectibleBehavior\CollectibleBehaviorManurePile.cs" />
   <Content Include="modinfo.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
@@ -55,7 +56,17 @@
 </ItemGroup>
 
 <ItemGroup>
-  <Folder Include="assets\naturalfertilizer\itemtypes\" />
+  <Folder Include="assets\naturalfertilizer\recipes\grid\" />
+  <Folder Include="assets\naturalfertilizer\recipes\barrel\" />
+  <Folder Include="assets\naturalfertilizer\textures\block\manurepile\" />
+  <Folder Include="assets\naturalfertilizer\textures\block\soil\" />
+  <Folder Include="Util\" />
+</ItemGroup>
+
+<ItemGroup>
+  <None Update="modicon.png">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </None>
 </ItemGroup>
 
 <ProjectExtensions><VisualStudio><UserProperties assets_4naturalfertilizer_4lang_4en_1json__JsonSchema="" properties_4launchsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>
