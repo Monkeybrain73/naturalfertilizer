@@ -673,3 +673,5 @@ fabric.properties
 # Additional files built by Visual Studio
 
 # End of https://www.toptal.com/developers/gitignore/api/csharp,visualstudio,visualstudiocode,rider
+/naturalfertilizer/Properties/launchSettings.json
+/naturalfertilizer/assets/naturalfertilizer/patches/animals-poop.json
