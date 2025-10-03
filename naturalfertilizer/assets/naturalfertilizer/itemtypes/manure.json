@@ -42,7 +42,7 @@
 		"general": [ "*" ],
 		"items": [ "*" ]
 	},
-	"maxstacksize": 32,
+	"maxstacksize": 64,
 	"materialDensity": 500,
 	"heldTpHitAnimation": "breaktool",
 	"fpHandTransform": {

@@ -67,10 +67,10 @@
         "code": "natfert.defecate",
         "properties": {
           "dungBase": "naturalfertilizer:smallpoop",
-          "stages": 2,
+          "stages": 4,
           "variants": [ "a" ],
-          "minHours": 12,
-          "maxHours": 18
+          "minHours": 18,
+          "maxHours": 28
         }
       }
     ]

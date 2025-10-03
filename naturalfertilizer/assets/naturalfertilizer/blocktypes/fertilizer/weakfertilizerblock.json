@@ -60,7 +60,8 @@
       "quantity": {
         "avg": 7,
         "var": 1
-      }
+      },
+      "tool": "shovel"
     }
   ],
   "collisionbox": {

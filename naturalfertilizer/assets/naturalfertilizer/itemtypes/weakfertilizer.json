@@ -20,8 +20,8 @@
   "attributes": {
     "fertilizerProps": {
       "n": 15,
-      "p": 5,
-      "k": 5
+      "p": 4,
+      "k": 4
     },
     "fertilizerTextureCode": "weakfert",
     "inContainerTexture": { "base": "naturalfertilizer:block/soil/weakcompost" }

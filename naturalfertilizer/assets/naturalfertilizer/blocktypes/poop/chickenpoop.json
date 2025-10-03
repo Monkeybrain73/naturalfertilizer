@@ -116,7 +116,10 @@
       {
         "type": "item",
         "code": "naturalfertilizer:manure",
-        "quantity": 1,
+        "quantity": {
+          "avg": 1,
+          "var": 0
+        },
         "tool": "shovel"
       }
     ],

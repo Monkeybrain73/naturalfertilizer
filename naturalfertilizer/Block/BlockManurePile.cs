@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Vintagestory.API.Client;
@@ -175,7 +174,6 @@ namespace naturalfertilizer
         }
     }
 
-
     public class BlockManurePile : BlockContainer, ITexPositionSource, IWearableShapeSupplier
     {
         public Size2i AtlasSize { get { return tmpTextureSource.AtlasSize; } }
@@ -286,9 +284,6 @@ namespace naturalfertilizer
 
         public ManureFermentationProps _fermentationProps;
 
-        /// <summary>
-        /// Read-from-JSON fermentation props. Lazily initialised so we never rely on OnLoaded.
-        /// </summary>
         public ManureFermentationProps FermentationProps
         {
             get
@@ -423,17 +418,19 @@ namespace naturalfertilizer
             ICoreClientAPI capi = api as ICoreClientAPI;
             if (capi == null) return;
 
-            string key = "manurepileMeshRefs" + FirstCodePart() + SubtypeInventory;
-            Dictionary<string, MultiTextureMeshRef> meshrefs = ObjectCacheUtil.TryGet<Dictionary<string, MultiTextureMeshRef>>(api, key);
+            string cacheKey = "manurepileMeshRefs" + FirstCodePart() + SubtypeInventory;
+            var meshrefs = ObjectCacheUtil.TryGet<Dictionary<string, MultiTextureMeshRef>>(api, cacheKey);
 
             if (meshrefs != null)
             {
-                foreach (var val in meshrefs)
+                foreach (var key in meshrefs.Keys.ToList())
                 {
-                    val.Value.Dispose();
+                    if (key.StartsWith(Props.DefaultType))
+                    {
+                        meshrefs[key]?.Dispose();
+                        meshrefs.Remove(key);
+                    }
                 }
-
-                capi.ObjectCache.Remove(key);
             }
         }
 
@@ -475,7 +472,6 @@ namespace naturalfertilizer
 
             return mesh;
         }
-
 
         public override void GetDecal(IWorldAccessor world, BlockPos pos, ITexPositionSource decalTexSource, ref MeshData decalModelData, ref MeshData blockModelData)
         {
@@ -543,6 +539,10 @@ namespace naturalfertilizer
 
         public override string GetPlacedBlockName(IWorldAccessor world, BlockPos pos)
         {
+            if (world.BlockAccessor.GetBlockEntity(pos) is BEManurePile be)
+            {
+                if (be.IsFermenting) return Lang.Get("Fermenting Manure Pile");
+            }
             return base.GetPlacedBlockName(world, pos);
         }
 
@@ -561,7 +561,6 @@ namespace naturalfertilizer
 
             return Props.DefaultType;
         }
-
 
         public override WorldInteraction[] GetPlacedBlockInteractionHelp(IWorldAccessor world, BlockSelection selection, IPlayer forPlayer)
         {
@@ -586,7 +585,5 @@ namespace naturalfertilizer
             }
             });
         }
-
     }
-
 }

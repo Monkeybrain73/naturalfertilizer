@@ -13,6 +13,7 @@ namespace naturalfertilizer
 {
     public sealed class Core : ModSystem
     {
+        public static NaturalFertilizerConfig Config;
 
         private Harmony HarmonyInstance => new Harmony("com.xxxapexxx.naturalferilizer");
 
@@ -27,16 +28,27 @@ namespace naturalfertilizer
         {
             api.RegisterBlockClass("natfert.manurestack", typeof(BlockManureStack));
             api.RegisterBlockClass("natfert.manurepile", typeof(BlockManurePile));
+            api.Logger.Event("...it poops");
 
             api.RegisterBlockEntityClass("natfert.bemanurestack", typeof(BlockEntityManureStack));
             api.RegisterBlockEntityClass("natfert.bemanurepile", typeof(BEManurePile));
+            api.Logger.Event("...it smells");
 
             api.RegisterEntityBehaviorClass("natfert.defecate", typeof(EntityBehaviorDefecate));
+            api.Logger.Event("...it reeks");
 
             api.RegisterCollectibleBehaviorClass("natfert.manurepile", typeof(CollectibleBehaviorManurePile));
             api.RegisterCollectibleBehaviorClass("natfert.manurestack", typeof(CollectibleBehaviorManureStack));
 
-            api.Logger.Event("started 'Natural Fertilizer' mod");
+            api.Logger.Event("'Natural Fertilizer' mod started");
+
+            Config = api.LoadModConfig<NaturalFertilizerConfig>("naturalfertilizer.json");
+            if (Config == null)
+            {
+                Config = new NaturalFertilizerConfig();
+                api.StoreModConfig(Config, "naturalfertilizer.json");
+            }
+            api.Logger.Event("'Natural Fertilizer' Config loaded");
         }
 
         public override void StartServerSide(ICoreServerAPI api)
@@ -53,6 +65,11 @@ namespace naturalfertilizer
         {
             HarmonyInstance.UnpatchAll("com.xxxapexxx.naturalferilizer");
             base.Dispose();
+        }
+
+        public class NaturalFertilizerConfig
+        {
+            public string[] ForbiddenDefecationBlocks { get; set; } = new string[0];
         }
     }
 }

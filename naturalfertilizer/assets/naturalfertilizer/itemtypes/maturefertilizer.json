@@ -20,8 +20,8 @@
   "attributes": {
     "fertilizerProps": {
       "n": 25,
-      "p": 7,
-      "k": 7
+      "p": 6,
+      "k": 6
     },
     "fertilizerTextureCode": "maturefert",
     "inContainerTexture": { "base": "naturalfertilizer:block/soil/maturecompost" }

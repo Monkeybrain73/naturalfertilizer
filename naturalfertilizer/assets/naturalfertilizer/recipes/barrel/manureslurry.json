@@ -1,0 +1,20 @@
+{
+  "code": "manureslurry",
+  "ingredients": [
+    {
+      "type": "item",
+      "code": "game:waterportion",
+      "litres": 1
+    },
+    {
+      "type": "item",
+      "code": "naturalfertilizer:manure",
+      "quantity": 5
+    }
+  ],
+  "output": {
+    "type": "item",
+    "code": "naturalfertilizer:manureslurryportion",
+    "litres": 5
+  }
+}

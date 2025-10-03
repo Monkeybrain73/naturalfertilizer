@@ -4,7 +4,7 @@
   "variantgroups": [
     {
       "code": "type",
-      "states": [ "1a", "2a" ]
+      "states": [ "1a", "2a", "3a", "4a" ]
     }
   ],
   "attributes": {
@@ -20,7 +20,9 @@
   "snowcoverage": true,
   "shapeinventoryByType": {
     "*-1*": { "base": "block/poop/small1a" },
-    "*-2*": { "base": "block/poop/small1a" }
+    "*-2*": { "base": "block/poop/small1a" },
+    "*-3*": { "base": "block/poop/small1a" },
+    "*-4*": { "base": "block/poop/small1a" }
   },
   "shape": {
     "base": "block/poop/small{type}",
@@ -92,7 +94,9 @@
   "maxstacksize": 32,
   "resistanceByType": {
     "*-1*": 1,
-    "*-2*": 2
+    "*-2*": 1.2,
+    "*-3*": 1.4,
+    "*-4*": 1.6
   },
   "blockmaterial": "Soil",
   "faceCullMode": "MergeSnowLayer",
@@ -113,7 +117,29 @@
         "type": "item",
         "code": "naturalfertilizer:manure",
         "quantity": {
+          "avg": 1,
+          "var": 0
+        },
+        "tool": "shovel"
+      }
+    ],
+    "*-3*": [
+      {
+        "type": "item",
+        "code": "naturalfertilizer:manure",
+        "quantity": {
           "avg": 1.5,
+          "var": 0.5
+        },
+        "tool": "shovel"
+      }
+    ],
+    "*-4*": [
+      {
+        "type": "item",
+        "code": "naturalfertilizer:manure",
+        "quantity": {
+          "avg": 2.5,
           "var": 0.5
         },
         "tool": "shovel"
@@ -133,7 +159,7 @@
   "sidesolid": {
     "all": false
   },
-  "replaceable": 5000,
+  "replaceable": 5999,
   "collisionbox": null,
   "selectionbox": {
     "x1": 0.25,

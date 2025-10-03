@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
-using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
@@ -59,29 +57,17 @@ namespace naturalfertilizer
         protected Cuboidf[] selBoxes;
 
         ItemSlot isUsingSlot;
-        /// <summary>
-        /// Needed to suppress client-side "set this block to air on empty inventory" functionality for newly placed blocks
-        /// otherwise set block to air can be triggered e.g. by the second tick of a player's right-click block interaction client-side, before the first server packet arrived to set the inventory to non-empty (due to lag of any kind)
-        /// </summary>
+
         public bool clientsideFirstPlacement = false;
 
-        private GroundStorageRenderer renderer;
+        // private GroundStorageRenderer renderer;
         public bool UseRenderer;
         public bool NeedsRetesselation;
 
-        /// <summary>
-        /// used for rendering in GroundStorageRenderer
-        /// </summary>
         public MultiTextureMeshRef[] MeshRefs = new MultiTextureMeshRef[4];
 
-        /// <summary>
-        /// used for custom scales when using GroundStorageRenderer
-        /// </summary>
         public ModelTransform[] ModelTransformsRenderer = new ModelTransform[4];
 
-        /// <summary>
-        /// Cache the upload meshes for stacking layout so it can be reused by the GroundStorageRenderer
-        /// </summary>
         private Dictionary<string, MultiTextureMeshRef> UploadedMeshCache =>
             ObjectCacheUtil.GetOrCreate(Api, "manureStackUMC", () => new Dictionary<string, MultiTextureMeshRef>());
 
@@ -211,11 +197,6 @@ namespace naturalfertilizer
             }
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="contents"></param>
-        /// <returns></returns>
         protected ItemStack GetShatteredStack(ItemStack contents)
         {
             var shatteredStack = contents.Collectible.Attributes?["shatteredStack"].AsObject<JsonItemStack>();
@@ -523,135 +504,141 @@ namespace naturalfertilizer
 
         public virtual bool TryPutItem(IPlayer player)
         {
-            if (TotalStackSize >= Capacity) return false;
-
-            ItemSlot hotbarSlot = player.InventoryManager.ActiveHotbarSlot;
-
-            if (hotbarSlot.Itemstack == null) return false;
-
-            ItemSlot invSlot = inventory[0];
-
-            if (invSlot.Empty)
+            lock (inventoryLock)
             {
-                bool putBulk = player.Entity.Controls.CtrlKey;
+                if (TotalStackSize >= Capacity) return false;
 
-                if (hotbarSlot.TryPutInto(Api.World, invSlot, putBulk ? BulkTransferQuantity : TransferQuantity) > 0)
+                ItemSlot hotbarSlot = player.InventoryManager.ActiveHotbarSlot;
+
+                if (hotbarSlot.Itemstack == null) return false;
+
+                ItemSlot invSlot = inventory[0];
+
+                if (invSlot.Empty)
                 {
+                    bool putBulk = player.Entity.Controls.CtrlKey;
+
+                    if (hotbarSlot.TryPutInto(Api.World, invSlot, putBulk ? BulkTransferQuantity : TransferQuantity) > 0)
+                    {
+                        Api.World.PlaySoundAt(ManureStackProps.PlaceRemoveSound.WithPathPrefixOnce("sounds/"), Pos.X + 0.5, Pos.InternalY, Pos.Z + 0.5, null, 0.88f + (float)Api.World.Rand.NextDouble() * 0.24f, 16);
+                    }
+
+                    Api.World.Logger.Audit("{0} Put {1}x{2} into new Manure stack at {3}.",
+                        player.PlayerName,
+                        TransferQuantity,
+                        invSlot.Itemstack.Collectible.Code,
+                        Pos
+                    );
+
+                    Api.World.BlockAccessor.TriggerNeighbourBlockUpdate(Pos);
+                    return true;
+                }
+
+                if (invSlot.Itemstack.Equals(Api.World, hotbarSlot.Itemstack, GlobalConstants.IgnoredStackAttributes))
+                {
+                    bool putBulk = player.Entity.Controls.CtrlKey;
+
+                    int q = GameMath.Min(hotbarSlot.StackSize, putBulk ? BulkTransferQuantity : TransferQuantity, Capacity - TotalStackSize);
+
+                    // add to the pile and average item temperatures
+                    int oldSize = invSlot.Itemstack.StackSize;
+                    invSlot.Itemstack.StackSize += q;
+                    if (oldSize + q > 0)
+                    {
+                        float tempPile = invSlot.Itemstack.Collectible.GetTemperature(Api.World, invSlot.Itemstack);
+                        float tempAdded = hotbarSlot.Itemstack.Collectible.GetTemperature(Api.World, hotbarSlot.Itemstack);
+                        invSlot.Itemstack.Collectible.SetTemperature(Api.World, invSlot.Itemstack, (tempPile * oldSize + tempAdded * q) / (oldSize + q), false);
+                    }
+
+                    if (player.WorldData.CurrentGameMode != EnumGameMode.Creative)
+                    {
+                        hotbarSlot.TakeOut(q);
+                        hotbarSlot.OnItemSlotModified(null);
+                    }
+
                     Api.World.PlaySoundAt(ManureStackProps.PlaceRemoveSound.WithPathPrefixOnce("sounds/"), Pos.X + 0.5, Pos.InternalY, Pos.Z + 0.5, null, 0.88f + (float)Api.World.Rand.NextDouble() * 0.24f, 16);
-                }
 
-                Api.World.Logger.Audit("{0} Put {1}x{2} into new Manure stack at {3}.",
-                    player.PlayerName,
-                    TransferQuantity,
-                    invSlot.Itemstack.Collectible.Code,
-                    Pos
-                );
+                    Api.World.Logger.Audit("{0} Put {1}x{2} into Manure stack at {3}.",
+                        player.PlayerName,
+                        q,
+                        invSlot.Itemstack.Collectible.Code,
+                        Pos
+                    );
 
-                Api.World.BlockAccessor.TriggerNeighbourBlockUpdate(Pos);
-                return true;
-            }
+                    Api.World.BlockAccessor.TriggerNeighbourBlockUpdate(Pos);
 
-            if (invSlot.Itemstack.Equals(Api.World, hotbarSlot.Itemstack, GlobalConstants.IgnoredStackAttributes))
-            {
-                bool putBulk = player.Entity.Controls.CtrlKey;
-
-                int q = GameMath.Min(hotbarSlot.StackSize, putBulk ? BulkTransferQuantity : TransferQuantity, Capacity - TotalStackSize);
-
-                // add to the pile and average item temperatures
-                int oldSize = invSlot.Itemstack.StackSize;
-                invSlot.Itemstack.StackSize += q;
-                if (oldSize + q > 0)
-                {
-                    float tempPile = invSlot.Itemstack.Collectible.GetTemperature(Api.World, invSlot.Itemstack);
-                    float tempAdded = hotbarSlot.Itemstack.Collectible.GetTemperature(Api.World, hotbarSlot.Itemstack);
-                    invSlot.Itemstack.Collectible.SetTemperature(Api.World, invSlot.Itemstack, (tempPile * oldSize + tempAdded * q) / (oldSize + q), false);
-                }
-
-                if (player.WorldData.CurrentGameMode != EnumGameMode.Creative)
-                {
-                    hotbarSlot.TakeOut(q);
-                    hotbarSlot.OnItemSlotModified(null);
-                }
-
-                Api.World.PlaySoundAt(ManureStackProps.PlaceRemoveSound.WithPathPrefixOnce("sounds/"), Pos.X + 0.5, Pos.InternalY, Pos.Z + 0.5, null, 0.88f + (float)Api.World.Rand.NextDouble() * 0.24f, 16);
-
-                Api.World.Logger.Audit("{0} Put {1}x{2} into Manure stack at {3}.",
-                    player.PlayerName,
-                    q,
-                    invSlot.Itemstack.Collectible.Code,
-                    Pos
-                );
-
-                Api.World.BlockAccessor.TriggerNeighbourBlockUpdate(Pos);
-
-                if (TotalStackSize >= Capacity)
-                {
-                    int stackHeight = 1;
-                    BlockPos tempPos = Pos.Copy();
-                    while (Api.World.BlockAccessor.GetBlockEntity(tempPos.Down()) is BlockEntityManureStack below
-                           && below.inventory[0].Itemstack?.Equals(Api.World, inventory[0].Itemstack, GlobalConstants.IgnoredStackAttributes) == true)
+                    if (TotalStackSize >= Capacity)
                     {
-                        stackHeight++;
-                        tempPos.Down();
+                        int stackHeight = 1;
+                        BlockPos tempPos = Pos.Copy();
+                        while (Api.World.BlockAccessor.GetBlockEntity(tempPos.Down()) is BlockEntityManureStack below
+                               && below.inventory[0].Itemstack?.Equals(Api.World, inventory[0].Itemstack, GlobalConstants.IgnoredStackAttributes) == true)
+                        {
+                            stackHeight++;
+                            tempPos.Down();
+                        }
+
+                        if (stackHeight >= ManureStackProps.MaxStackingHeight)
+                        {
+                            ConvertToPile();
+                            // Debug.WriteLine("Manure stack at {0} converted to pile after reaching max capacity of {1}", Pos, ManureStackProps.StackingCapacity);
+                        }
                     }
 
-                    if (stackHeight >= ManureStackProps.MaxStackingHeight)
+                    MarkDirty(true);
+
+                    Cuboidf[] collBoxes = Api.World.BlockAccessor.GetBlock(Pos).GetCollisionBoxes(Api.World.BlockAccessor, Pos);
+                    if (collBoxes != null && collBoxes.Length > 0 && CollisionTester.AabbIntersect(collBoxes[0], Pos.X, Pos.Y, Pos.Z, player.Entity.SelectionBox, player.Entity.SidedPos.XYZ))
                     {
-                        ConvertToPile();
-                        Debug.WriteLine("Manure stack at {0} converted to pile after reaching max capacity of {1}", Pos, ManureStackProps.StackingCapacity);
+                        player.Entity.SidedPos.Y += collBoxes[0].Y2 - (player.Entity.SidedPos.Y - (int)player.Entity.SidedPos.Y);
                     }
+
+                    return true;
                 }
 
-                MarkDirty(true);
-
-                Cuboidf[] collBoxes = Api.World.BlockAccessor.GetBlock(Pos).GetCollisionBoxes(Api.World.BlockAccessor, Pos);
-                if (collBoxes != null && collBoxes.Length > 0 && CollisionTester.AabbIntersect(collBoxes[0], Pos.X, Pos.Y, Pos.Z, player.Entity.SelectionBox, player.Entity.SidedPos.XYZ))
-                {
-                    player.Entity.SidedPos.Y += collBoxes[0].Y2 - (player.Entity.SidedPos.Y - (int)player.Entity.SidedPos.Y);
-                }
-
-                return true;
+                return false;
             }
-
-            return false;
         }
 
         public bool TryTakeItem(IPlayer player)
         {
-            bool takeBulk = player.Entity.Controls.CtrlKey;
-            int q = GameMath.Min(takeBulk ? BulkTransferQuantity : TransferQuantity, TotalStackSize);
-
-            if (inventory[0]?.Itemstack != null)
+            lock (inventoryLock)
             {
-                ItemStack stack = inventory[0].TakeOut(q);
-                player.InventoryManager.TryGiveItemstack(stack);
+                bool takeBulk = player.Entity.Controls.CtrlKey;
+                int q = GameMath.Min(takeBulk ? BulkTransferQuantity : TransferQuantity, TotalStackSize);
 
-                if (stack.StackSize > 0)
+                if (inventory[0]?.Itemstack != null)
                 {
-                    Api.World.SpawnItemEntity(stack, Pos);
+                    ItemStack stack = inventory[0].TakeOut(q);
+                    player.InventoryManager.TryGiveItemstack(stack);
+
+                    if (stack.StackSize > 0)
+                    {
+                        Api.World.SpawnItemEntity(stack, Pos);
+                    }
+
+                    Api.World.Logger.Audit("{0} Took {1}x{2} from Manure stack at {3}.",
+                        player.PlayerName,
+                        q,
+                        stack.Collectible.Code,
+                        Pos
+                    );
                 }
 
-                Api.World.Logger.Audit("{0} Took {1}x{2} from Manure stack at {3}.",
-                    player.PlayerName,
-                    q,
-                    stack.Collectible.Code,
-                    Pos
-                );
+                if (TotalStackSize == 0)
+                {
+                    Api.World.BlockAccessor.SetBlock(0, Pos);
+                }
+                else Api.World.BlockAccessor.TriggerNeighbourBlockUpdate(Pos);
+
+                Api.World.PlaySoundAt(ManureStackProps.PlaceRemoveSound, Pos.X + 0.5, Pos.InternalY, Pos.Z + 0.5, null, 0.88f + (float)Api.World.Rand.NextDouble() * 0.24f, 16);
+
+                MarkDirty(true);
+
+                (player as IClientPlayer)?.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
+
+                return true;
             }
-
-            if (TotalStackSize == 0)
-            {
-                Api.World.BlockAccessor.SetBlock(0, Pos);
-            }
-            else Api.World.BlockAccessor.TriggerNeighbourBlockUpdate(Pos);
-
-            Api.World.PlaySoundAt(ManureStackProps.PlaceRemoveSound, Pos.X + 0.5, Pos.InternalY, Pos.Z + 0.5, null, 0.88f + (float)Api.World.Rand.NextDouble() * 0.24f, 16);
-
-            MarkDirty(true);
-
-            (player as IClientPlayer)?.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
-
-            return true;
         }
 
         public bool putOrGetItemSingle(ItemSlot ourSlot, IPlayer player, BlockSelection bs)
@@ -795,7 +782,7 @@ namespace naturalfertilizer
 
             // Replace current stack with the manure pile block
             Api.World.BlockAccessor.SetBlock(pileBlock.BlockId, Pos);
-            Debug.WriteLine("Manure stack at {0} converted to pile", Pos);
+            // Debug.WriteLine("Manure stack at {0} converted to pile", Pos);
 
         }
 
@@ -1086,7 +1073,7 @@ namespace naturalfertilizer
                     mesh?.Dispose();
                 }
             }
-            renderer?.Dispose();
+            // renderer?.Dispose();
         }
 
     }

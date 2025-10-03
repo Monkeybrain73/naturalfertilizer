@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
-using Vintagestory.GameContent;
 
 #nullable disable
 
@@ -12,9 +10,6 @@ namespace naturalfertilizer
 {
     public enum EnumManureStackLayout
     {
-        /// <summary>
-        /// A generic stack of items
-        /// </summary>
         Stacking
     }
 
@@ -64,7 +59,6 @@ namespace naturalfertilizer
         }
     }
 
-
     public class CollectibleBehaviorManureStack : CollectibleBehavior
     {
         public ManureStackProperties ManureStackProps
@@ -84,12 +78,10 @@ namespace naturalfertilizer
             ManureStackProps = properties.AsObject<ManureStackProperties>(null, collObj.Code.Domain);
         }
 
-
         public override void OnHeldInteractStart(ItemSlot itemslot, EntityAgent byEntity, BlockSelection blockSel, EntitySelection entitySel, bool firstEvent, ref EnumHandHandling handHandling, ref EnumHandling handling)
         {
             Interact(itemslot, byEntity, blockSel, entitySel, firstEvent, ref handHandling, ref handling);
         }
-
 
         public override WorldInteraction[] GetHeldInteractionHelp(ItemSlot inSlot, ref EnumHandling handling)
         {
@@ -104,8 +96,6 @@ namespace naturalfertilizer
                 }
             };
         }
-
-
 
         public static void Interact(ItemSlot itemslot, EntityAgent byEntity, BlockSelection blockSel, EntitySelection entitySel, bool firstEvent, ref EnumHandHandling handHandling, ref EnumHandling handling)
         {
@@ -160,8 +150,5 @@ namespace naturalfertilizer
                 handling = EnumHandling.PreventSubsequent;
             }
         }
-
-
-
     }
 }

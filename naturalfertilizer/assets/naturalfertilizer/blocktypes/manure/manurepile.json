@@ -98,6 +98,17 @@
     "walk": "game:walk/sludge1"
   },
   "materialDensity": 600,
+  "drops": [
+    {
+      "type": "item",
+      "code": "naturalfertilizer:manure",
+      "quantity": {
+        "avg": 32,
+        "var": 0
+      },
+      "tool": "shovel"
+    }
+  ],
   "tpHandTransform": {
     "translation": {
       "x": -1.5,
@@ -120,19 +131,19 @@
     "scale": 1.46
   },
   "collisionbox": {
-    "x1": 0.1875,
+    "x1": 0.0625,
     "y1": 0,
-    "z1": 0.1875,
-    "x2": 0.8125,
+    "z1": 0.0625,
+    "x2": 0.9375,
     "y2": 0.625,
-    "z2": 0.7625
+    "z2": 0.8875
   },
-  "selectionbox": {
-    "x1": 0.1875,
+  "selectionBox": {
+    "x1": 0.0625,
     "y1": 0,
-    "z1": 0.1875,
-    "x2": 0.8125,
+    "z1": 0.0625,
+    "x2": 0.9375,
     "y2": 0.625,
-    "z2": 0.7625
+    "z2": 0.8875
   }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Vintagestory.API.Client;
@@ -26,7 +25,7 @@ namespace naturalfertilizer
 
         public bool IsFermenting;
 
-        public long listnerId;
+        public long listenerId;
 
         public string type = "manure-fresh";
         public string preferredFillState = "empty";
@@ -43,8 +42,7 @@ namespace naturalfertilizer
 
         Cuboidf selBoxManurePile;
 
-
-        public virtual float MeshAngle
+        public new virtual float MeshAngle
         {
             get { return rotAngleY; }
             set
@@ -89,7 +87,7 @@ namespace naturalfertilizer
             }
             if (Api.Side == EnumAppSide.Server)
             {
-                listnerId = RegisterGameTickListener(CheckFermentationProgress, 5000); // every 5 seconds
+                listenerId = RegisterGameTickListener(CheckFermentationProgress, 5000); // every 5 seconds
             }
         }
 
@@ -219,23 +217,24 @@ namespace naturalfertilizer
                 inventory.SlotModified += Inventory_SlotModified;
             }
 
-            inventory.SlotModified += (slotIndex) =>
+            if (inventory != null)
             {
-                if (Api.Side == EnumAppSide.Client)
+                inventory.SlotModified += (slotIndex) =>
                 {
-                    loadOrCreateMesh();
-                }
-                MarkDirty(true); // Mark block dirty so client updates properly
-            };
+                    if (Api.Side == EnumAppSide.Client)
+                    {
+                        loadOrCreateMesh();
+                    }
+                    MarkDirty(true); // Mark block dirty so client updates properly
+                };
+            }
 
             container.Reset();
 
-            // Read fermentation props from the block (lazy)
             var manifoldBlock = block as BlockManurePile;
             var ferProps = manifoldBlock?.FermentationProps;
             if (ferProps != null)
             {
-                // store locally in BE if you prefer
                 this.fermentationProps = ferProps;
             }
         }
@@ -280,7 +279,7 @@ namespace naturalfertilizer
                 }
                 else if (!slot.Empty)
                 {
-                    return; // Non-grass found → can't ferment
+                    return;
                 }
             }
 
@@ -312,6 +311,10 @@ namespace naturalfertilizer
                 {
                     CompleteFermentation();
                 }
+                else
+                {
+                    MarkDirty(true);
+                }
             }
         }
 
@@ -328,6 +331,12 @@ namespace naturalfertilizer
             {
                 Api.World.BlockAccessor.SetBlock(result.BlockId, Pos);
             }
+            if (listenerId != 0)
+            {
+                UnregisterGameTickListener(listenerId);
+                listenerId = 0;
+            }
+
             MarkDirty(true);
         }
 
@@ -381,7 +390,6 @@ namespace naturalfertilizer
             tree.SetDouble("fermentDurationHours", fermentationDurationHours);
 
         }
-
 
         public override void OnLoadCollectibleMappings(IWorldAccessor worldForResolve, Dictionary<int, AssetLocation> oldBlockIdMapping, Dictionary<int, AssetLocation> oldItemIdMapping, int schematicSeed, bool resolveImports)
         {
@@ -518,7 +526,7 @@ namespace naturalfertilizer
                 }
                 else
                 {
-                    dsc.AppendLine(Lang.Get("Add grass to start fermeting"));
+                    dsc.AppendLine(Lang.Get("Add grass to start fermenting"));
                 }
             }
 
@@ -528,22 +536,55 @@ namespace naturalfertilizer
 
         public override void OnBlockUnloaded()
         {
-            FreeAtlasSpace();
+            Cleanup();
             base.OnBlockUnloaded();
         }
 
         public override void OnBlockRemoved()
         {
-            FreeAtlasSpace();
+            Cleanup();
             base.OnBlockRemoved();
-            // UnregisterGameTickListener(listnerId);
         }
 
         private void FreeAtlasSpace()
         {
+            if (Api is ICoreClientAPI capi)
+            {
+                string cacheKey = "manurepileMeshes" + Block.FirstCodePart();
+                var meshes = ObjectCacheUtil.TryGet<Dictionary<string, MeshData>>(capi, cacheKey);
+
+                if (meshes != null)
+                {
+                    // Remove only this BE's meshes
+                    var keysToRemove = meshes.Keys.Where(k => k.StartsWith(type)).ToList();
+                    foreach (var key in keysToRemove)
+                    {
+                        meshes.Remove(key);
+                    }
+                }
+            }
+
+            ownMesh = null;
         }
 
-        public void OnTransformed(IWorldAccessor worldAccessor, ITreeAttribute tree, int degreeRotation,
+        private void Cleanup()
+        {
+            if (listenerId != 0)
+            {
+                UnregisterGameTickListener(listenerId);
+                listenerId = 0;
+            }
+
+            FreeAtlasSpace();
+            ownMesh = null;
+
+            if (inventory != null)
+            {
+                inventory.SlotModified -= Inventory_SlotModified;
+            }
+        }
+
+        public new void OnTransformed(IWorldAccessor worldAccessor, ITreeAttribute tree, int degreeRotation,
             Dictionary<int, AssetLocation> oldBlockIdMapping, Dictionary<int, AssetLocation> oldItemIdMapping, EnumAxis? flipAxis)
         {
             ownMesh = null;
@@ -565,7 +606,5 @@ namespace naturalfertilizer
 
             return false;
         }
-
-
     }
 }

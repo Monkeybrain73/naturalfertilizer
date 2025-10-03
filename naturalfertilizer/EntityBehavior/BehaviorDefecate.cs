@@ -1,5 +1,4 @@
-﻿using Cairo;
-using System;
+﻿using System;
 using System.Linq;
 using Vintagestory.API.Common;
 using Vintagestory.API.Common.Entities;
@@ -10,6 +9,8 @@ namespace naturalfertilizer
 {
     public class EntityBehaviorDefecate : EntityBehavior
     {
+        public override string PropertyName() => "defecate";
+
         public readonly ICoreAPI api;
         public readonly Random rand;
         private string dungBase = "naturalfertilizer:dung";
@@ -65,7 +66,6 @@ namespace naturalfertilizer
         {
             if (nextDefecationHour > 0 && entity.World.Calendar.TotalHours >= nextDefecationHour)
             {
-                
                 Defecate();
                 nextDefecationHour = -1;
             }
@@ -73,22 +73,44 @@ namespace naturalfertilizer
 
         private void Defecate()
         {
+            if (!canDefecate) return;
+
             IWorldAccessor world = entity.World;
             BlockPos pos = entity.ServerPos.AsBlockPos.DownCopy();
 
-            if (!world.BlockAccessor.GetBlock(pos).IsReplacableBy(world.GetBlock(new AssetLocation($"{dungBase}-1{variants[0]}"))))
+            Block dungBlockTemplate = world.GetBlock(new AssetLocation($"{dungBase}-1{variants[0]}"));
+            Block targetBlock = world.BlockAccessor.GetBlock(pos);
+
+            // If the block below is not replaceable enough, try current pos instead
+            if (targetBlock.Replaceable < 6000 && !IsDungBlock(targetBlock))
             {
                 pos = entity.ServerPos.AsBlockPos;
+                targetBlock = world.BlockAccessor.GetBlock(pos);
+                // Debug.WriteLine("[Defecate] {0} trying to defecate at own position {1}", entity.GetName(), pos);
+                // Debug.WriteLine("[Defecate] {0} block at own position is {1} (replaceable {2})", entity.GetName(), targetBlock.Code?.ToShortString(), targetBlock.Replaceable);
             }
 
-            Block currentBlock = world.BlockAccessor.GetBlock(pos);
+            // Abort if still not replaceable
+            if (targetBlock.Replaceable < 6000 && !IsDungBlock(targetBlock))
+            {
+                entity.World.Logger.Debug("[Defecate] {0} could not defecate at {1}, block not replaceable ({2})",
+                    entity.GetName(), pos, targetBlock.Code?.ToShortString());
+                return;
+            }
 
+            if (IsBlockedBySpecialCase(targetBlock))
+            {
+                // entity.World.Logger.Debug("[Defecate] {0} skipped defecating at {1}, special block detected", entity.GetName(), pos);
+                return;
+            }
+
+            // Stage/variant handling
             int newStage = 1;
             string chosenVariant = variants[rand.Next(variants.Length)];
 
-            if (currentBlock.Code != null && currentBlock.Code.Path.StartsWith(dungBase.Split(':')[1]))
+            if (IsDungBlock(targetBlock))
             {
-                string[] parts = currentBlock.Code.Path.Split('-');
+                string[] parts = targetBlock.Code.Path.Split('-');
                 if (parts.Length > 1)
                 {
                     string stagePart = new string(parts[1].TakeWhile(char.IsDigit).ToArray());
@@ -112,12 +134,25 @@ namespace naturalfertilizer
             if (newBlock != null)
             {
                 world.BlockAccessor.SetBlock(newBlock.BlockId, pos);
+                // entity.World.Logger.Debug("[Defecate] {0} defecated at {1}, placed block {2}", entity.GetName(), pos, newBlockCode);
             }
-            entity.World.Logger.Debug("[Defecate] {0} defecated at {1}, placed block {2}", entity.GetName(), pos, newBlockCode);
+
             canDefecate = false;
         }
 
-        public override string PropertyName() => "defecate";
+        private bool IsBlockedBySpecialCase(Block block)
+        {
+            if (block?.Code == null) return false;
+
+            string path = block.Code.Path;
+            return Core.Config.ForbiddenDefecationBlocks
+                .Any(forbidden => path.Contains(forbidden, StringComparison.OrdinalIgnoreCase));
+        }
+
+        private bool IsDungBlock(Block block)
+        {
+            return block?.Code != null && block.Code.Path.StartsWith(dungBase.Split(':')[1]);
+        }
 
         private string FormatTime(double totalHours)
         {

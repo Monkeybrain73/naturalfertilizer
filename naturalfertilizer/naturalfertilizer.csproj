@@ -56,8 +56,8 @@
 </ItemGroup>
 
 <ItemGroup>
+  <Folder Include="assets\game\lang\" />
   <Folder Include="assets\naturalfertilizer\recipes\grid\" />
-  <Folder Include="assets\naturalfertilizer\recipes\barrel\" />
   <Folder Include="assets\naturalfertilizer\textures\block\manurepile\" />
   <Folder Include="assets\naturalfertilizer\textures\block\soil\" />
   <Folder Include="Util\" />

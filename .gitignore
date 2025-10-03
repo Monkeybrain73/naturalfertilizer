@@ -675,3 +675,4 @@ fabric.properties
 # End of https://www.toptal.com/developers/gitignore/api/csharp,visualstudio,visualstudiocode,rider
 /naturalfertilizer/Properties/launchSettings.json
 /naturalfertilizer/assets/naturalfertilizer/patches/animals-poop.json
+/naturalfertilizer/CollectibleBehavior/CollectibleBehaviorManurePile.cs

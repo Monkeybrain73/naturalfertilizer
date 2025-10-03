@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
-using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Util;
 using Vintagestory.GameContent;
@@ -19,7 +18,7 @@ namespace naturalfertilizer
         ItemStack[] groundStorablesQuadrants;
         ItemStack[] groundStorablesHalves;
 
-        public static bool IsUsingContainedBlock; // This value is only relevant (and correct) client side
+        public static bool IsUsingContainedBlock;
 
         public override void OnLoaded(ICoreAPI api)
         {
@@ -154,7 +153,6 @@ namespace naturalfertilizer
             return base.GetBlockMaterial(blockAccessor, pos, stack);
         }
 
-
         public override ItemStack[] GetDrops(IWorldAccessor world, BlockPos pos, IPlayer byPlayer, float dropQuantityMultiplier = 1)
         {
             BlockEntity be = world.BlockAccessor.GetBlockEntity(pos);
@@ -183,8 +181,6 @@ namespace naturalfertilizer
 
             return 1;
         }
-
-
 
         public bool CreateStorage(IWorldAccessor world, BlockSelection blockSel, IPlayer player)
         {
@@ -241,7 +237,6 @@ namespace naturalfertilizer
 
             (player as IClientPlayer)?.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
 
-
             return true;
         }
 
@@ -250,7 +245,6 @@ namespace naturalfertilizer
             BlockEntityManureStack beg = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityManureStack;
 
         }
-
 
         public override int GetColorWithoutTint(ICoreClientAPI capi, BlockPos pos)
         {
@@ -361,8 +355,6 @@ namespace naturalfertilizer
 
                     }.Append(base.GetPlacedBlockInteractionHelp(world, selection, forPlayer)).Append(liquidInteractions);
                 }
-
-
             }
 
             return base.GetPlacedBlockInteractionHelp(world, selection, forPlayer);

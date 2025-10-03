@@ -1,0 +1,16 @@
+{
+  "code": "manurecompost",
+  "sealHours": 240,
+  "ingredients": [
+    {
+      "type": "item",
+      "code": "naturalfertilizer:manuremixportion",
+      "litres": 50
+    }
+  ],
+  "output": {
+    "type": "item",
+    "code": "naturalfertilizer:maturefertilizer",
+    "stackSize": 16
+  }
+}
