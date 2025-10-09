@@ -10,7 +10,6 @@ using Vintagestory.GameContent;
 #nullable disable
 
 namespace naturalfertilizer
-
 {
 
     public class BlockManureStack : Block
@@ -29,21 +28,6 @@ namespace naturalfertilizer
                 List<ItemStack> qstacks = new List<ItemStack>();
                 List<ItemStack> hstacks = new List<ItemStack>();
 
-                /*
-                foreach (CollectibleObject obj in api.World.Collectibles)
-                {
-                    var storableBh = obj.GetBehavior<CollectibleBehaviorManureStack>();
-                    if (storableBh?.StorageProps.Layout == EnumGroundStorageLayout.Quadrants)
-                    {
-                        qstacks.Add(new ItemStack(obj));
-                    }
-                    if (storableBh?.StorageProps.Layout == EnumGroundStorageLayout.Halves)
-                    {
-                        hstacks.Add(new ItemStack(obj));
-                    }
-                }
-                */
-
                 return new ItemStack[][] { qstacks.ToArray(), hstacks.ToArray() };
             });
 
@@ -55,7 +39,6 @@ namespace naturalfertilizer
                 ICoreClientAPI capi = api as ICoreClientAPI;
                 capi.Event.MouseUp += Event_MouseUp;
             }
-
         }
 
         private void Event_MouseUp(MouseEvent e)

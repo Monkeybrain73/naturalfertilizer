@@ -1,0 +1,162 @@
+[
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "thecritterpack:entities/animal/bird/duck/mallard/mallard-duck-male.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:chickenpoop",
+          "stages": 4,
+          "variants": [ "a" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "thecritterpack" } ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "thecritterpack:entities/animal/bird/duck/mallard/mallard-duck-female.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:chickenpoop",
+          "stages": 4,
+          "variants": [ "a" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "thecritterpack" } ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "thecritterpack:entities/animal/bird/duck/call/call-duck-male.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:chickenpoop",
+          "stages": 4,
+          "variants": [ "a" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "thecritterpack" } ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "thecritterpack:entities/animal/bird/duck/call/call-duck-female.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:chickenpoop",
+          "stages": 4,
+          "variants": [ "a" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "thecritterpack" } ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "thecritterpack:entities/animal/bird/duck/pekin/pekin-duck-male.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:chickenpoop",
+          "stages": 4,
+          "variants": [ "a" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "thecritterpack" } ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "thecritterpack:entities/animal/bird/duck/pekin/pekin-duck-female.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:chickenpoop",
+          "stages": 4,
+          "variants": [ "a" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "thecritterpack" } ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "thecritterpack:entities/animal/mammal/hooved/yak/yak-male.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:dung",
+          "stages": 4,
+          "variants": [ "a", "b", "c", "d" ],
+          "minHours": 24,
+          "maxHours": 34
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "thecritterpack" } ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "thecritterpack:entities/animal/mammal/hooved/yak/yak-female.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:dung",
+          "stages": 4,
+          "variants": [ "a", "b", "c", "d" ],
+          "minHours": 24,
+          "maxHours": 34
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "thecritterpack" } ]
+  }
+]

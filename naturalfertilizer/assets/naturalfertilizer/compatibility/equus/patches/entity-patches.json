@@ -1,0 +1,62 @@
+[
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "equus:entities/tamedwildhorse.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:dung",
+          "stages": 4,
+          "variants": [ "a", "b", "c", "d" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "equus" } ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "equus:entities/wildwildhorse.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:dung",
+          "stages": 4,
+          "variants": [ "a", "b", "c", "d" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "equus" } ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "equus:entities/feralwildhorse.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:dung",
+          "stages": 4,
+          "variants": [ "a", "b", "c", "d" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "equus" } ]
+  }
+]

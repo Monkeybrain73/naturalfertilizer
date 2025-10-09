@@ -159,7 +159,7 @@
   "sidesolid": {
     "all": false
   },
-  "replaceable": 5999,
+  "replaceable": 5900,
   "collisionbox": null,
   "selectionbox": {
     "x1": 0.25,

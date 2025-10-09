@@ -1,0 +1,82 @@
+[
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "moreanimals:entities/capercaillie.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:chickenpoop",
+          "stages": 4,
+          "variants": [ "a" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "moreanimals" } ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "moreanimals:entities/goldenpheasant.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:chickenpoop",
+          "stages": 4,
+          "variants": [ "a" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "moreanimals" } ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "moreanimals:entities/pheasant.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:chickenpoop",
+          "stages": 4,
+          "variants": [ "a" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "moreanimals" } ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "moreanimals:entities/wildturkey.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:chickenpoop",
+          "stages": 4,
+          "variants": [ "a" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "moreanimals" } ]
+  }
+]

@@ -1,0 +1,42 @@
+[
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "bovinae:entities/animal/mammal/hooved/bovinae-tamed.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:dung",
+          "stages": 4,
+          "variants": [ "a", "b", "c", "d" ],
+          "minHours": 24,
+          "maxHours": 34
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "bovinae" } ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "game:entities/animal/mammal/hooved/bovinae-baby.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:dung",
+          "stages": 4,
+          "variants": [ "a", "b", "c", "d" ],
+          "minHours": 28,
+          "maxHours": 38
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "bovinae" } ]
+  }
+]

@@ -48,7 +48,7 @@
   "resistance": 2,
   "lightAbsorption": 0,
   "sounds": {
-    "walk": "game:walk/sludge",
+    "walk": "game:walk/sludge1",
     "place": "game:walk/sludge1",
     "break": "game:walk/sludge2",
     "hit": "game:block/gravel"
