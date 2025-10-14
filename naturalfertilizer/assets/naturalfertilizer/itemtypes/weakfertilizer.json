@@ -18,6 +18,14 @@
     }
   ],
   "attributes": {
+    "handbook": {
+      "extraSections": [
+        {
+          "title": "weakfertilizer-handbook-help-title",
+          "text": "weakfertilizer-handbook-help-text"
+        }
+      ]
+    },
     "fertilizerProps": {
       "n": 15,
       "p": 4,

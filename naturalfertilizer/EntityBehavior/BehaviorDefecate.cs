@@ -1,17 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using Vintagestory.API.Client;
-using Vintagestory.API.Server;
-using Vintagestory.API.Common;
-using Vintagestory.API.Common.Entities;
-using Vintagestory.API.Config;
-using Vintagestory.API.Datastructures;
-using Vintagestory.API.MathTools;
-using Vintagestory.GameContent;
-
-namespace naturalfertilizer
+﻿namespace naturalfertilizer
 {
     public class EntityBehaviorDefecate : EntityBehavior
     {
@@ -62,6 +49,12 @@ namespace naturalfertilizer
 
             Core.DebugUtil.Log(entity.Api, "Initialized for {0}, dungBase={1}, stages={2}, variants={3}, minHours={4}, maxHours={5}",
                 entity.Code, dungBase, maxStages, string.Join(",", variants), minHours, maxHours);
+
+            if (Configs.SConfig.EnableGenelibCompat && entity.WatchedAttributes.GetTreeAttribute("hunger") == null)
+            {
+                Core.DebugUtil.Log(entity.Api, "Genelib compat enabled but hunger tree missing — disabling compat mode");
+                Configs.SConfig.EnableGenelibCompat = false;
+            }
         }
 
         public override void Notify(string key, object data)

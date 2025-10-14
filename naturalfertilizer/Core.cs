@@ -1,16 +1,7 @@
-﻿using HarmonyLib;
-using System;
-using System.Linq;
-using System.Text;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
-using Vintagestory.API.Server;
-
-
-[assembly: ModInfo("naturalfertilizer",
+﻿[assembly: ModInfo("naturalfertilizer",
                     Authors = new string[] { "xXx_Ape_xXx" },
                     Description = "Adds natural fertilizer created from animal droppings",
-                    Version = "1.2.0")]
+                    Version = "1.3.0")]
 
 namespace naturalfertilizer
 {

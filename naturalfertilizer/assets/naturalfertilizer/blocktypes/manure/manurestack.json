@@ -1,5 +1,7 @@
 {
   "code": "manurestack",
+  "class": "natfert.manurestack",
+  "entityClass": "natfert.bemanurestack",
   "behaviors": [
     { "name": "Lockable" },
     {
@@ -22,8 +24,6 @@
       "code": "clayshattered-normal"
     }
   },
-  "class": "natfert.manurestack",
-  "entityClass": "natfert.bemanurestack",
   "shape": {
     "base": "game:block/basic/invisible"
   },

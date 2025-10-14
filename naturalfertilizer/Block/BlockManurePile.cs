@@ -1,16 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Vintagestory.API.Client;
-using Vintagestory.API.Common;
-using Vintagestory.API.Common.Entities;
-using Vintagestory.API.Config;
-using Vintagestory.API.MathTools;
-using Vintagestory.API.Util;
-using Vintagestory.GameContent;
+﻿#nullable disable
 
-#nullable disable
+using Vintagestory.API.Config;
 
 namespace naturalfertilizer
 {
@@ -378,6 +368,7 @@ namespace naturalfertilizer
                 }
             }
 
+            Core.DebugUtil.Verbose(api, "Placed manure pile of type {0} at {1}", byItemStack.Attributes.GetString("type", Props.DefaultType), blockSel.Position);
             return val;
         }
 
@@ -505,14 +496,41 @@ namespace naturalfertilizer
             return stack;
         }
 
-        public override ItemStack[] GetDrops(IWorldAccessor world, BlockPos pos, IPlayer byPlayer, float dropQuantityMultiplier = 1)
+        public override void OnBlockBroken(IWorldAccessor world, BlockPos pos, IPlayer byPlayer, float dropQuantityMultiplier = 1f)
         {
-            return new ItemStack[] { OnPickBlock(world, pos) };
+            if (world.Side != EnumAppSide.Server) return;
+
+            world.BlockAccessor.SetBlock(0, pos);
+
+            ItemStack manureStack = new ItemStack(world.GetItem(new AssetLocation("naturalfertilizer:manure")), 32);
+            world.SpawnItemEntity(manureStack, pos.ToVec3d().Add(0.5, 0.5, 0.5));
+
+            Core.DebugUtil.Log(world.Api, "[ManurePile] Dropped 32 manure items at {0}", pos);
         }
 
         public override BlockDropItemStack[] GetDropsForHandbook(ItemStack handbookStack, IPlayer forPlayer)
         {
-            return new BlockDropItemStack[] { new BlockDropItemStack(handbookStack) };
+            if (Drops != null)
+            {
+                IEnumerable<BlockDropItemStack> drops = Array.Empty<BlockDropItemStack>();
+
+                foreach (BlockDropItemStack drop in Drops)
+                {
+                    if (drop.ResolvedItemstack.Collectible is IResolvableCollectible resolvable)
+                    {
+                        BlockDropItemStack[] resolvableStacks = resolvable.GetDropsForHandbook(handbookStack, forPlayer);
+
+                        drops = drops.Concat(resolvableStacks);
+                    }
+                    else
+                    {
+                        drops = drops.Append(drop);
+                    }
+                }
+                return drops.ToArray();
+            }
+
+            return Drops;
         }
 
         public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection blockSel)

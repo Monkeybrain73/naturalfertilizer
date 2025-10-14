@@ -4,13 +4,19 @@
   "matterState": "liquid",
   "attributes": {
     "handbook": {
+      "extraSections": [
+        {
+          "title": "manureslurryportion-handbook-help-title",
+          "text": "manureslurryportion-handbook-help-text"
+        }
+      ],
       "ignoreCreativeInvStacks": true
     },
     "waterTightContainerProps": {
       "containable": true,
       "itemsPerLitre": 100,
-      "isopaque": true,
       "texture": { "base": "naturalfertilizer:block/soil/manureslurry" },
+      "isopaque": true,
       "allowSpill": true,
       "whenSpilled": {
         "action": "DropContents",

@@ -18,6 +18,14 @@
     }
   ],
   "attributes": {
+    "handbook": {
+      "extraSections": [
+        {
+          "title": "maturefertilizer-handbook-help-title",
+          "text": "maturefertilizer-handbook-help-text"
+        }
+      ]
+    },
     "fertilizerProps": {
       "n": 25,
       "p": 6,

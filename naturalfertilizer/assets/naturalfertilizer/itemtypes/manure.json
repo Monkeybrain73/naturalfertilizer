@@ -1,5 +1,16 @@
 {
 	"code": "manure",
+	"attributes": {
+		"handbook": {
+			"include": true,
+			"extraSections": [
+				{
+					"title": "manure-handbook-help-title",
+					"text": "manure-handbook-help-text"
+				}
+			]
+		}
+	},
 	"behaviors": [
 		{
 			"name": "natfert.manurestack",

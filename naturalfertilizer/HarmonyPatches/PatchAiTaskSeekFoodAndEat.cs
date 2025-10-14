@@ -1,8 +1,4 @@
-﻿using HarmonyLib;
-using Vintagestory.API.Common;
-using Vintagestory.GameContent;
-
-namespace naturalfertilizer
+﻿namespace naturalfertilizer
 {
     [HarmonyPatch(typeof(AiTaskSeekFoodAndEat), "ContinueExecute")]
     public static class Patch_AiTaskSeekFoodAndEat

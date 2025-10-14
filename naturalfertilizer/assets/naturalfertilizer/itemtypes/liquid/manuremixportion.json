@@ -4,13 +4,19 @@
   "matterState": "liquid",
   "attributes": {
     "handbook": {
+      "extraSections": [
+        {
+          "title": "manuremixportion-handbook-help-title",
+          "text": "manuremixportion-handbook-help-text"
+        }
+      ],
       "ignoreCreativeInvStacks": true
     },
     "waterTightContainerProps": {
       "containable": true,
       "itemsPerLitre": 100,
-      "isopaque": true,
       "texture": { "base": "naturalfertilizer:block/manurepile/manurepile-stage3" },
+      "isopaque": true,
       "allowSpill": true,
       "whenSpilled": {
         "action": "DropContents",

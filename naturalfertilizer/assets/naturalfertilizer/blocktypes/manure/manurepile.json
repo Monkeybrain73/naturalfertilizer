@@ -11,11 +11,17 @@
     },
     "humanoidTraversalCost": 2,
     "reinforcable": true,
-    "partialAttachable": true,
+    "partialAttachable": false,
     "inventoryClassName": "manurepile",
     "defaultType": "manure-fresh",
     "handbook": {
-      "groupBy": [ "manurepile" ]
+      "groupBy": [ "manurepile" ],
+      "extraSections": [
+        {
+          "title": "manurepile-handbook-help-title",
+          "text": "manurepile-handbook-help-text"
+        }
+      ]
     },
     "types": [ "manure-fresh" ],
     "properties": {
@@ -28,8 +34,6 @@
     }
   },
   "behaviors": [
-    { "name": "Lockable" },
-    { "name": "Container" },
     { "name": "natfert.manurepile" }
   ],
   "creativeinventory": {},
@@ -105,8 +109,7 @@
       "quantity": {
         "avg": 32,
         "var": 0
-      },
-      "tool": "shovel"
+      }
     }
   ],
   "tpHandTransform": {

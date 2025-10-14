@@ -107,8 +107,8 @@
         "type": "item",
         "code": "naturalfertilizer:manure",
         "quantity": {
-          "avg": 2,
-          "var": 1
+          "avg": 1,
+          "var": 0
         },
         "tool": "shovel"
       }
@@ -118,8 +118,8 @@
         "type": "item",
         "code": "naturalfertilizer:manure",
         "quantity": {
-          "avg": 2,
-          "var": 1
+          "avg": 1.5,
+          "var": 0.5
         },
         "tool": "shovel"
       }
@@ -129,8 +129,8 @@
         "type": "item",
         "code": "naturalfertilizer:manure",
         "quantity": {
-          "avg": 3,
-          "var": 1
+          "avg": 2,
+          "var": 0
         },
         "tool": "shovel"
       }
@@ -140,8 +140,8 @@
         "type": "item",
         "code": "naturalfertilizer:manure",
         "quantity": {
-          "avg": 4,
-          "var": 1
+          "avg": 2.5,
+          "var": 0.5
         },
         "tool": "shovel"
       }
