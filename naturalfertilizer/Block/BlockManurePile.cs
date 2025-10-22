@@ -1,7 +1,5 @@
 ﻿#nullable disable
 
-using Vintagestory.API.Config;
-
 namespace naturalfertilizer
 {
     public class ManureFermentationProps

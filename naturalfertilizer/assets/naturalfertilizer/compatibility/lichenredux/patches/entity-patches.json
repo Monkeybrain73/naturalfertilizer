@@ -1,0 +1,42 @@
+[
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "lichenredux:entities/land/gemsbok.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:dung",
+          "stages": 4,
+          "variants": [ "a", "b", "c", "d" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "lichenredux" } ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "lichenredux:entities/land/whitehart.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:dung",
+          "stages": 4,
+          "variants": [ "a", "b", "c", "d" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "lichenredux" } ]
+  }
+]

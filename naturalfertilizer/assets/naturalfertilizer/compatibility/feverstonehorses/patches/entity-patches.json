@@ -1,0 +1,62 @@
+[
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "feverstonehorses:entities/land/horse.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:dung",
+          "stages": 4,
+          "variants": [ "a", "b", "c", "d" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "feverstonehorses" } ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "feverstonehorses:entities/land/taminghorse.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:dung",
+          "stages": 4,
+          "variants": [ "a", "b", "c", "d" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "feverstonehorses" } ]
+  },
+  {
+    "enabled": true,
+    "side": "server",
+    "op": "addmerge",
+    "file": "feverstonehorses:entities/land/foal.json",
+    "path": "/server/behaviors",
+    "value": [
+      {
+        "code": "natfert.defecate",
+        "properties": {
+          "dungBase": "naturalfertilizer:dung",
+          "stages": 4,
+          "variants": [ "a", "b", "c", "d" ],
+          "minHours": 24,
+          "maxHours": 36
+        }
+      }
+    ],
+    "dependsOn": [ { "modid": "feverstonehorses" } ]
+  }
+]
