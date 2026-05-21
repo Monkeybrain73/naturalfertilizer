@@ -203,10 +203,10 @@ namespace naturalfertilizer
                 GetCollisionBoxes(world.BlockAccessor, pos)[0],
                 pos.X, pos.Y, pos.Z,
                 player.Entity.SelectionBox,
-                player.Entity.SidedPos.XYZ
+                player.Entity.Pos.XYZ
             ))
             {
-                player.Entity.SidedPos.Y += GetCollisionBoxes(world.BlockAccessor, pos)[0].Y2;
+                player.Entity.Pos.Y += GetCollisionBoxes(world.BlockAccessor, pos)[0].Y2;
             }
 
             (player as IClientPlayer)?.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);

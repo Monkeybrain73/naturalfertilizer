@@ -157,7 +157,7 @@ namespace naturalfertilizer
         protected void didMoveItems(ItemStack stack, IPlayer byPlayer)
         {
             (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
-            AssetLocation sound = stack?.Block?.Sounds?.Place;
+            AssetLocation sound = stack?.Block?.Sounds?.Place.Location;
             Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("game:sounds/walk/sludge1"), byPlayer.Entity, byPlayer, true, 16);
         }
     }
@@ -265,7 +265,7 @@ namespace naturalfertilizer
         }
 
 
-        public override bool DoParticalSelection(IWorldAccessor world, BlockPos pos)
+        public bool DoParticleSelection(IWorldAccessor world, BlockPos pos)
         {
             return true;
         }

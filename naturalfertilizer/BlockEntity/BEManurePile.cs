@@ -180,7 +180,7 @@ namespace naturalfertilizer
             if (Api.Side == EnumAppSide.Client) loadOrCreateMesh();
 
             (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
-            AssetLocation sound = stack?.Block?.Sounds?.Place;
+            AssetLocation sound = stack?.Block?.Sounds?.Place.Location;
             Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("game:sounds/walk/sludge1"), byPlayer.Entity, byPlayer, true, 16);
         }
 
