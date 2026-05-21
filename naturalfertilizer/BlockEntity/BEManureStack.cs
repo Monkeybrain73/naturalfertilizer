@@ -193,8 +193,8 @@ namespace naturalfertilizer
                 shatteredStack.Resolve(Api.World, "shatteredStack for" + contents.Collectible.Code);
                 if (shatteredStack.ResolvedItemstack != null)
                 {
-                    var stack = shatteredStack.ResolvedItemstack;
-                    return stack;
+                    var slot = shatteredStack.ResolvedItemstack;
+                    return slot;
                 }
             }
             shatteredStack = Block.Attributes?["shatteredStack"].AsObject<JsonItemStack>();
@@ -203,8 +203,8 @@ namespace naturalfertilizer
                 shatteredStack.Resolve(Api.World, "shatteredStack for" + contents.Collectible.Code);
                 if (shatteredStack.ResolvedItemstack != null)
                 {
-                    var stack = shatteredStack.ResolvedItemstack;
-                    return stack;
+                    var slot = shatteredStack.ResolvedItemstack;
+                    return slot;
                 }
             }
             return null;
@@ -511,7 +511,7 @@ namespace naturalfertilizer
                         Api.World.PlaySoundAt(ManureStackProps.PlaceRemoveSound.WithPathPrefixOnce("sounds/"), Pos.X + 0.5, Pos.InternalY, Pos.Z + 0.5, null, 0.88f + (float)Api.World.Rand.NextDouble() * 0.24f, 16);
                     }
 
-                    Api.World.Logger.Audit("{0} Put {1}x{2} into new Manure stack at {3}.",
+                    Api.World.Logger.Audit("{0} Put {1}x{2} into new Manure slot at {3}.",
                         player.PlayerName,
                         TransferQuantity,
                         invSlot.Itemstack.Collectible.Code,
@@ -546,7 +546,7 @@ namespace naturalfertilizer
 
                     Api.World.PlaySoundAt(ManureStackProps.PlaceRemoveSound.WithPathPrefixOnce("sounds/"), Pos.X + 0.5, Pos.InternalY, Pos.Z + 0.5, null, 0.88f + (float)Api.World.Rand.NextDouble() * 0.24f, 16);
 
-                    Api.World.Logger.Audit("{0} Put {1}x{2} into Manure stack at {3}.",
+                    Api.World.Logger.Audit("{0} Put {1}x{2} into Manure slot at {3}.",
                         player.PlayerName,
                         q,
                         invSlot.Itemstack.Collectible.Code,
@@ -569,16 +569,16 @@ namespace naturalfertilizer
                         if (stackHeight >= ManureStackProps.MaxStackingHeight)
                         {
                             ConvertToPile();
-                            // Debug.WriteLine("Manure stack at {0} converted to pile after reaching max capacity of {1}", Pos, ManureStackProps.StackingCapacity);
+                            // Debug.WriteLine("Manure slot at {0} converted to pile after reaching max capacity of {1}", Pos, ManureStackProps.StackingCapacity);
                         }
                     }
 
                     MarkDirty(true);
 
                     Cuboidf[] collBoxes = Api.World.BlockAccessor.GetBlock(Pos).GetCollisionBoxes(Api.World.BlockAccessor, Pos);
-                    if (collBoxes != null && collBoxes.Length > 0 && CollisionTester.AabbIntersect(collBoxes[0], Pos.X, Pos.Y, Pos.Z, player.Entity.SelectionBox, player.Entity.SidedPos.XYZ))
+                    if (collBoxes != null && collBoxes.Length > 0 && CollisionTester.AabbIntersect(collBoxes[0], Pos.X, Pos.Y, Pos.Z, player.Entity.SelectionBox, player.Entity.Pos.XYZ))
                     {
-                        player.Entity.SidedPos.Y += collBoxes[0].Y2 - (player.Entity.SidedPos.Y - (int)player.Entity.SidedPos.Y);
+                        player.Entity.Pos.Y += collBoxes[0].Y2 - (player.Entity.Pos.Y - (int)player.Entity.Pos.Y);
                     }
 
                     return true;
@@ -597,18 +597,18 @@ namespace naturalfertilizer
 
                 if (inventory[0]?.Itemstack != null)
                 {
-                    ItemStack stack = inventory[0].TakeOut(q);
-                    player.InventoryManager.TryGiveItemstack(stack);
+                    ItemStack slot = inventory[0].TakeOut(q);
+                    player.InventoryManager.TryGiveItemstack(slot);
 
-                    if (stack.StackSize > 0)
+                    if (slot.StackSize > 0)
                     {
-                        Api.World.SpawnItemEntity(stack, Pos);
+                        Api.World.SpawnItemEntity(slot, Pos);
                     }
 
-                    Api.World.Logger.Audit("{0} Took {1}x{2} from Manure stack at {3}.",
+                    Api.World.Logger.Audit("{0} Took {1}x{2} from Manure slot at {3}.",
                         player.PlayerName,
                         q,
-                        stack.Collectible.Code,
+                        slot.Collectible.Code,
                         Pos
                     );
                 }
@@ -664,9 +664,9 @@ namespace naturalfertilizer
 
                     if (moved > 0)
                     {
-                        heldLiquidContainer.SplitStackAndPerformAction(player.Entity, hotbarSlot, delegate (ItemStack stack)
+                        heldLiquidContainer.SplitStackAndPerformAction(player.Entity, hotbarSlot, delegate (ItemStack slot)
                         {
-                            liquidSource.TryTakeContent(stack, moved);
+                            liquidSource.TryTakeContent(slot, moved);
                             return moved;
                         });
                         heldLiquidContainer.DoLiquidMovedEffects(player, contentStackToMove, moved, BlockLiquidContainerBase.EnumLiquidDirection.Pour);
@@ -684,7 +684,7 @@ namespace naturalfertilizer
                     {
                         ItemStack liquidStackForParticles = owncontentStack.Clone();
                         float litres = (singleTake ? liquidSink.TransferSizeLitres : liquidSink.CapacityLitres);
-                        int moved = heldLiquidContainer.SplitStackAndPerformAction(player.Entity, hotbarSlot, (ItemStack stack) => liquidSink.TryPutLiquid(stack, owncontentStack, litres));
+                        int moved = heldLiquidContainer.SplitStackAndPerformAction(player.Entity, hotbarSlot, (ItemStack slot) => liquidSink.TryPutLiquid(slot, owncontentStack, litres));
                         if (moved > 0)
                         {
                             heldLiquidContainer.TryTakeContent(ourSlot.Itemstack, moved);
@@ -714,12 +714,12 @@ namespace naturalfertilizer
 
                     if (player.WorldData.CurrentGameMode == EnumGameMode.Creative)
                     {
-                        ItemStack stack = hotbarSlot.Itemstack.Clone();
-                        stack.StackSize = 1;
-                        if (new DummySlot(stack).TryPutInto(Api.World, ourSlot, TransferQuantity) > 0)
+                        ItemStack slot = hotbarSlot.Itemstack.Clone();
+                        slot.StackSize = 1;
+                        if (new DummySlot(slot).TryPutInto(Api.World, ourSlot, TransferQuantity) > 0)
                         {
                             Api.World.PlaySoundAt(ManureStackProps.PlaceRemoveSound, Pos.X + 0.5, Pos.InternalY, Pos.Z + 0.5, player, 0.88f + (float)Api.World.Rand.NextDouble() * 0.24f, 16);
-                            Api.World.Logger.Audit("{0} Put 1x{1} into Manure stack at {2}.",
+                            Api.World.Logger.Audit("{0} Put 1x{1} into Manure slot at {2}.",
                                 player.PlayerName,
                                 ourSlot.Itemstack.Collectible.Code,
                                 Pos
@@ -731,7 +731,7 @@ namespace naturalfertilizer
                         if (hotbarSlot.TryPutInto(Api.World, ourSlot, TransferQuantity) > 0)
                         {
                             Api.World.PlaySoundAt(ManureStackProps.PlaceRemoveSound, Pos.X + 0.5, Pos.InternalY, Pos.Z + 0.5, player, 0.88f + (float)Api.World.Rand.NextDouble() * 0.24f, 16);
-                            Api.World.Logger.Audit("{0} Put 1x{1} into Manure stack at {2}.",
+                            Api.World.Logger.Audit("{0} Put 1x{1} into Manure slot at {2}.",
                                 player.PlayerName,
                                 ourSlot.Itemstack.Collectible.Code,
                                 Pos
@@ -748,7 +748,7 @@ namespace naturalfertilizer
 
                     Api.World.PlaySoundAt(ManureStackProps.PlaceRemoveSound, Pos.X + 0.5, Pos.InternalY, Pos.Z + 0.5, player, 0.88f + (float)Api.World.Rand.NextDouble() * 0.24f, 16);
 
-                    Api.World.Logger.Audit("{0} Took 1x{1} from Manure stack at {2}.",
+                    Api.World.Logger.Audit("{0} Took 1x{1} from Manure slot at {2}.",
                         player.PlayerName,
                         ourSlot.Itemstack?.Collectible.Code,
                         Pos
@@ -768,9 +768,9 @@ namespace naturalfertilizer
             Block pileBlock = Api.World.GetBlock(new AssetLocation("naturalfertilizer:manurepile"));
             if (pileBlock == null) return;
 
-            // Replace current stack with the manure pile block
+            // Replace current slot with the manure pile block
             Api.World.BlockAccessor.SetBlock(pileBlock.BlockId, Pos);
-            // Debug.WriteLine("Manure stack at {0} converted to pile", Pos);
+            // Debug.WriteLine("Manure slot at {0} converted to pile", Pos);
 
         }
 
@@ -841,13 +841,13 @@ namespace naturalfertilizer
             {
                 var firstSlot = inventory.FirstNonEmptySlot;
 
-                ItemStack stack = firstSlot.Itemstack;
+                ItemStack slot = firstSlot.Itemstack;
                 int sumQ = inventory.Sum(s => s.StackSize);
 
                 string name = firstSlot.Itemstack.Collectible.GetCollectibleInterface<IContainedCustomName>()?.GetContainedName(firstSlot, sumQ);
                 if (name != null) return name;
 
-                if (sumQ == 1) return stack.GetName();
+                if (sumQ == 1) return slot.GetName();
                 return contentSummary[0];
             }
 
@@ -860,11 +860,11 @@ namespace naturalfertilizer
 
             string[] contentSummary = getContentSummary();
 
-            ItemStack stack = inventory.FirstNonEmptySlot.Itemstack;
+            ItemStack slot = inventory.FirstNonEmptySlot.Itemstack;
             // Only add supplemental info for non-BlockEntities (otherwise it will be wrong or will get into a recursive loop, because right now this BEGroundStorage is the BlockEntity)
-            if (contentSummary.Length == 1 && stack.Collectible.GetCollectibleInterface<IContainedCustomName>() == null && stack.Class == EnumItemClass.Block && ((Block)stack.Collectible).EntityClass == null)
+            if (contentSummary.Length == 1 && slot.Collectible.GetCollectibleInterface<IContainedCustomName>() == null && slot.Class == EnumItemClass.Block && ((Block)slot.Collectible).EntityClass == null)
             {
-                string detailedInfo = stack.Block.GetPlacedBlockInfo(Api.World, Pos, forPlayer);
+                string detailedInfo = slot.Block.GetPlacedBlockInfo(Api.World, Pos, forPlayer);
                 if (detailedInfo != null && detailedInfo.Length > 0) dsc.Append(detailedInfo);
             }
             else
@@ -892,7 +892,7 @@ namespace naturalfertilizer
 
         public virtual string[] getContentSummary()
         {
-            OrderedDictionary<string, int> dict = new();
+            Vintagestory.API.Datastructures.OrderedDictionary<string, int> dict = new();
 
             foreach (var slot in inventory)
             {
@@ -966,28 +966,28 @@ namespace naturalfertilizer
             }
         }
 
-        protected override string getMeshCacheKey(ItemStack stack)
+        protected override string getMeshCacheKey(ItemSlot slot)
         {
-            return (ManureStackProps?.ModelItemsToStackSizeRatio > 0 ? stack.StackSize : 1) + "x" + base.getMeshCacheKey(stack);
+            return (ManureStackProps?.ModelItemsToStackSizeRatio > 0 ? slot.StackSize : 1) + "x" + base.getMeshCacheKey(slot);
         }
 
-        protected override MeshData getOrCreateMesh(ItemStack stack, int index)
+        protected override MeshData getOrCreateMesh(ItemSlot slot, int index)
         {
-            if (stack.Class == EnumItemClass.Block)
+            if (slot.Itemstack.Class == EnumItemClass.Block)
             {
-                    MeshRefs[index] = capi.TesselatorManager.GetDefaultBlockMeshRef(stack.Block);
+                    MeshRefs[index] = capi.TesselatorManager.GetDefaultBlockMeshRef(slot.Itemstack.Block);
             }
             // shingle/bricks are items but uses Stacking layout to get the mesh, so this should be not needed atm
-            else if (stack.Class == EnumItemClass.Item && ManureStackProps != null && ManureStackProps.Layout != EnumManureStackLayout.Stacking)
+            else if (slot.Itemstack.Class == EnumItemClass.Item && ManureStackProps != null && ManureStackProps.Layout != EnumManureStackLayout.Stacking)
             {
-                MeshRefs[index] = capi.TesselatorManager.GetDefaultItemMeshRef(stack.Item);
+                MeshRefs[index] = capi.TesselatorManager.GetDefaultItemMeshRef(slot.Itemstack.Item);
             }
 
 
             if (ManureStackProps?.Layout == EnumManureStackLayout.Stacking)
             {
-                var key = getMeshCacheKey(stack);
-                var mesh = getMesh(stack);
+                var key = getMeshCacheKey(slot);
+                var mesh = getMesh(slot);
 
                 if (mesh != null)
                 {
@@ -997,15 +997,15 @@ namespace naturalfertilizer
 
                 var loc = ManureStackProps.StackingModel.Clone().WithPathPrefixOnce("shapes/").WithPathAppendixOnce(".json");
                 nowTesselatingShape = Shape.TryGet(capi, loc);
-                nowTesselatingObj = stack.Collectible;
+                nowTesselatingObj = slot.Itemstack.Collectible;
 
                 if (nowTesselatingShape == null)
                 {
-                    capi.Logger.Error("Stacking model shape for collectible " + stack.Collectible.Code + " not found. Block will be invisible!");
+                    capi.Logger.Error("Stacking model shape for collectible " + slot.Itemstack.Collectible.Code + " not found. Block will be invisible!");
                     return null;
                 }
 
-                capi.Tesselator.TesselateShape("storagePile", nowTesselatingShape, out mesh, this, null, 0, 0, 0, (int)Math.Ceiling(ManureStackProps.ModelItemsToStackSizeRatio * stack.StackSize));
+                capi.Tesselator.TesselateShape("storagePile", nowTesselatingShape, out mesh, this, null, 0, 0, 0, (int)Math.Ceiling(ManureStackProps.ModelItemsToStackSizeRatio * slot.StackSize));
 
                 MeshCache[key] = mesh;
 
@@ -1015,10 +1015,10 @@ namespace naturalfertilizer
                 return mesh;
             }
 
-            var meshData = base.getOrCreateMesh(stack, index);
-            if (stack.Collectible.Attributes?[AttributeTransformCode].Exists == true)
+            var meshData = base.getOrCreateMesh(slot, index);
+            if (slot.Itemstack.Collectible.Attributes?[AttributeTransformCode].Exists == true)
             {
-                var transform = stack.Collectible.Attributes?[AttributeTransformCode].AsObject<ModelTransform>();
+                var transform = slot.Itemstack.Collectible.Attributes?[AttributeTransformCode].AsObject<ModelTransform>();
                 ModelTransformsRenderer[index] = transform;
             }
             else
@@ -1052,7 +1052,7 @@ namespace naturalfertilizer
             Dispose();
         }
 
-        protected virtual void Dispose()
+        protected override void Dispose()
         {
             if (UploadedMeshCache != null)
             {
