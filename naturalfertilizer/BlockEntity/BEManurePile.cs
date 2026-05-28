@@ -177,11 +177,9 @@ namespace naturalfertilizer
 
         protected void didMoveItems(ItemStack stack, IPlayer byPlayer)
         {
-            if (Api.Side == EnumAppSide.Client) loadOrCreateMesh();
-
             (Api as ICoreClientAPI)?.World.Player.TriggerFpAnimation(EnumHandInteract.HeldItemInteract);
-            AssetLocation sound = stack?.Block?.Sounds?.Place;
-            Api.World.PlaySoundAt(sound != null ? sound : new AssetLocation("game:sounds/walk/sludge1"), byPlayer.Entity, byPlayer, true, 16);
+            SoundAttributes? sound = stack?.Block?.Sounds?.Place;
+            Api.World.PlaySoundAt(sound ?? GlobalConstants.DefaultBuildSound, byPlayer.Entity, byPlayer);
         }
 
         protected virtual void InitInventory(Block block, ICoreAPI api)

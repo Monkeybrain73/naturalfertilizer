@@ -1,7 +1,7 @@
 ﻿[assembly: ModInfo("naturalfertilizer",
                     Authors = new string[] { "xXx_Ape_xXx" },
                     Description = "Adds natural fertilizer created from animal droppings",
-                    Version = "1.3.0")]
+                    Version = "1.5.0")]
 
 namespace naturalfertilizer
 {

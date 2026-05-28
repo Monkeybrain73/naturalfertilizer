@@ -102,14 +102,14 @@
             if (!CanDefecate) return;
 
             IWorldAccessor world = entity.World;
-            BlockPos pos = entity.ServerPos.AsBlockPos.DownCopy();
+            BlockPos pos = entity.Pos.AsBlockPos.DownCopy();
 
             Block targetBlock = world.BlockAccessor.GetBlock(pos);
 
             // If the block below is not replaceable enough, try current pos instead
             if (targetBlock.Replaceable < 6000 && !IsDungBlock(targetBlock))
             {
-                pos = entity.ServerPos.AsBlockPos;
+                pos = entity.Pos.AsBlockPos;
                 targetBlock = world.BlockAccessor.GetBlock(pos);
                 Core.DebugUtil.Log(entity.Api, "{0} trying to defecate at own position {1}", entity.GetName(), pos);
                 Core.DebugUtil.Log(entity.Api, "{0} block at own position is {1} (replaceable {2})",

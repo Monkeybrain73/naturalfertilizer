@@ -120,8 +120,9 @@ namespace naturalfertilizer
         {
             get
             {
-                // Prio 1: Get from list of explicility defined textures
-                if (ManureStackProps?.Layout == EnumManureStackLayout.Stacking && ManureStackProps.StackingTextures != null)
+                // Custom stacking textures first
+                if (ManureStackProps?.Layout == EnumManureStackLayout.Stacking &&
+                    ManureStackProps.StackingTextures != null)
                 {
                     if (ManureStackProps.StackingTextures.TryGetValue(textureCode, out var texturePath))
                     {
@@ -129,11 +130,26 @@ namespace naturalfertilizer
                     }
                 }
 
-                // Prio 2: Try other texture sources
-                return base[textureCode];
+                ItemStack stack = inventory?.FirstNonEmptySlot?.Itemstack;
+
+                if (stack == null) return null;
+
+                CompositeTexture tex = null;
+
+                if (stack.Block != null)
+                {
+                    stack.Block.Textures?.TryGetValue(textureCode, out tex);
+                }
+                else if (stack.Item != null)
+                {
+                    stack.Item.Textures?.TryGetValue(textureCode, out tex);
+                }
+
+                if (tex?.Base == null) return null;
+
+                return getOrCreateTexPos(tex.Base);
             }
         }
-
         public bool CanAttachBlockAt(BlockFacing blockFace, Cuboidi attachmentArea)
         {
             if (ManureStackProps == null) return false;
@@ -576,9 +592,9 @@ namespace naturalfertilizer
                     MarkDirty(true);
 
                     Cuboidf[] collBoxes = Api.World.BlockAccessor.GetBlock(Pos).GetCollisionBoxes(Api.World.BlockAccessor, Pos);
-                    if (collBoxes != null && collBoxes.Length > 0 && CollisionTester.AabbIntersect(collBoxes[0], Pos.X, Pos.Y, Pos.Z, player.Entity.SelectionBox, player.Entity.SidedPos.XYZ))
+                    if (collBoxes != null && collBoxes.Length > 0 && CollisionTester.AabbIntersect(collBoxes[0], Pos.X, Pos.Y, Pos.Z, player.Entity.SelectionBox, player.Entity.Pos.XYZ))
                     {
-                        player.Entity.SidedPos.Y += collBoxes[0].Y2 - (player.Entity.SidedPos.Y - (int)player.Entity.SidedPos.Y);
+                        player.Entity.Pos.Y += collBoxes[0].Y2 - (player.Entity.Pos.Y - (int)player.Entity.Pos.Y);
                     }
 
                     return true;
@@ -892,7 +908,7 @@ namespace naturalfertilizer
 
         public virtual string[] getContentSummary()
         {
-            OrderedDictionary<string, int> dict = new();
+            Vintagestory.API.Datastructures.OrderedDictionary<string, int> dict = new();
 
             foreach (var slot in inventory)
             {
@@ -910,14 +926,28 @@ namespace naturalfertilizer
             return dict.Select(elem => Lang.Get("{0}x {1}", elem.Value, elem.Key)).ToArray();
         }
 
-        
-        public override bool OnTesselation(ITerrainMeshPool mesher, ITesselatorAPI tesselator)
+        public override bool OnTesselation(ITerrainMeshPool mesher, ITesselatorAPI tess)
         {
-            NeedsRetesselation = false;
-            lock (inventoryLock)
-            {
-                return base.OnTesselation(mesher, tesselator);
-            }
+            if (inventory.Empty) return true;
+
+            ItemStack stack = inventory[0].Itemstack;
+
+            MeshData mesh = GetOrCreateManureMesh(stack);
+
+            if (mesh == null) return true;
+
+            MeshData clone = mesh.Clone();
+
+            clone.Rotate(
+                new Vec3f(0.5f, 0.5f, 0.5f),
+                0,
+                MeshAngle,
+                0
+            );
+
+            mesher.AddMeshData(clone);
+
+            return true;
         }
 
         Vec3f rotatedOffset(Vec3f offset, float radY)
@@ -966,67 +996,51 @@ namespace naturalfertilizer
             }
         }
 
-        protected override string getMeshCacheKey(ItemStack stack)
+
+        private string GetManureMeshCacheKey(ItemStack stack)
         {
-            return (ManureStackProps?.ModelItemsToStackSizeRatio > 0 ? stack.StackSize : 1) + "x" + base.getMeshCacheKey(stack);
+            return stack.Id + "-" + stack.StackSize;
         }
 
-        protected override MeshData getOrCreateMesh(ItemStack stack, int index)
+        private MeshData GetOrCreateManureMesh(ItemStack stack)
         {
-            if (stack.Class == EnumItemClass.Block)
+            string key = GetManureMeshCacheKey(stack);
+
+            if (MeshCache.TryGetValue(key, out MeshData mesh))
             {
-                    MeshRefs[index] = capi.TesselatorManager.GetDefaultBlockMeshRef(stack.Block);
-            }
-            // shingle/bricks are items but uses Stacking layout to get the mesh, so this should be not needed atm
-            else if (stack.Class == EnumItemClass.Item && ManureStackProps != null && ManureStackProps.Layout != EnumManureStackLayout.Stacking)
-            {
-                MeshRefs[index] = capi.TesselatorManager.GetDefaultItemMeshRef(stack.Item);
-            }
-
-
-            if (ManureStackProps?.Layout == EnumManureStackLayout.Stacking)
-            {
-                var key = getMeshCacheKey(stack);
-                var mesh = getMesh(stack);
-
-                if (mesh != null)
-                {
-                    UploadedMeshCache.TryGetValue(key, out MeshRefs[index]);
-                    return mesh;
-                }
-
-                var loc = ManureStackProps.StackingModel.Clone().WithPathPrefixOnce("shapes/").WithPathAppendixOnce(".json");
-                nowTesselatingShape = Shape.TryGet(capi, loc);
-                nowTesselatingObj = stack.Collectible;
-
-                if (nowTesselatingShape == null)
-                {
-                    capi.Logger.Error("Stacking model shape for collectible " + stack.Collectible.Code + " not found. Block will be invisible!");
-                    return null;
-                }
-
-                capi.Tesselator.TesselateShape("storagePile", nowTesselatingShape, out mesh, this, null, 0, 0, 0, (int)Math.Ceiling(ManureStackProps.ModelItemsToStackSizeRatio * stack.StackSize));
-
-                MeshCache[key] = mesh;
-
-                if (UploadedMeshCache.TryGetValue(key, out var mr)) mr.Dispose();
-                UploadedMeshCache[key] = capi.Render.UploadMultiTextureMesh(mesh);
-                MeshRefs[index] = UploadedMeshCache[key];
                 return mesh;
             }
 
-            var meshData = base.getOrCreateMesh(stack, index);
-            if (stack.Collectible.Attributes?[AttributeTransformCode].Exists == true)
+            var loc = ManureStackProps.StackingModel
+                .Clone()
+                .WithPathPrefixOnce("shapes/")
+                .WithPathAppendixOnce(".json");
+
+            Shape shape = Shape.TryGet(capi, loc);
+
+            if (shape == null)
             {
-                var transform = stack.Collectible.Attributes?[AttributeTransformCode].AsObject<ModelTransform>();
-                ModelTransformsRenderer[index] = transform;
-            }
-            else
-            {
-                ModelTransformsRenderer[index] = null;
+                capi.Logger.Error($"Missing manure stack shape: {loc}");
+                return null;
             }
 
-            return meshData;
+            capi.Tesselator.TesselateShape(
+                "manurestack",
+                shape,
+                out mesh,
+                this,
+                null,
+                0,
+                0,
+                0,
+                (int)Math.Ceiling(
+                    ManureStackProps.ModelItemsToStackSizeRatio * stack.StackSize
+                )
+            );
+
+            MeshCache[key] = mesh;
+
+            return mesh;
         }
 
         public void OnTransformed(IWorldAccessor worldAccessor, ITreeAttribute tree, int degreeRotation, Dictionary<int, AssetLocation> oldBlockIdMapping, Dictionary<int, AssetLocation> oldItemIdMapping, EnumAxis? flipAxis)
@@ -1052,7 +1066,7 @@ namespace naturalfertilizer
             Dispose();
         }
 
-        protected virtual void Dispose()
+        protected override void Dispose()
         {
             if (UploadedMeshCache != null)
             {
